@@ -4,8 +4,8 @@
         <OutputType>Exe</OutputType>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <TargetFrameworks>net8.0;net9.0</TargetFrameworks>
         <LangVersion>default</LangVersion>
+        <TargetFramework>net9.0</TargetFramework>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
@@ -36,6 +36,9 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Content Include="..\..\Config\NetworkProtocol\Inner\InnerMessage.proto">
+        <Link>InnerMessage.proto</Link>
+      </Content>
       <Content Include="..\..\Config\NetworkProtocol\Outer\OuterMessage.proto">
         <Link>OuterMessage.proto</Link>
       </Content>

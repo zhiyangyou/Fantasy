@@ -21,8 +21,8 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <AssemblyName>Fantasy-Net</AssemblyName>
-        <TargetFrameworks>net8.0;net9.0</TargetFrameworks>
         <LangVersion>preview</LangVersion>
+        <TargetFramework>net9.0</TargetFramework>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
