@@ -64,4 +64,46 @@ namespace Fantasy
 		[ProtoMember(3)]
 		public uint ErrorCode { get; set; }
 	}
+	[ProtoContract]
+	public partial class C2G_Test2 : AMessage, IMessage, IProto
+	{
+		public static C2G_Test2 Create(Scene scene)
+		{
+			return scene.MessagePoolComponent.Rent<C2G_Test2>();
+		}
+		public override void Dispose()
+		{
+			msg_content = default;
+			frameOpCode = default;
+#if FANTASY_NET || FANTASY_UNITY
+			GetScene().MessagePoolComponent.Return<C2G_Test2>(this);
+#endif
+		}
+		public uint OpCode() { return OuterOpcode.C2G_Test2; }
+		[ProtoMember(1)]
+		public string msg_content { get; set; }
+		[ProtoMember(2)]
+		public long frameOpCode { get; set; }
+	}
+	[ProtoContract]
+	public partial class G2C_Test2 : AMessage, IMessage, IProto
+	{
+		public static G2C_Test2 Create(Scene scene)
+		{
+			return scene.MessagePoolComponent.Rent<G2C_Test2>();
+		}
+		public override void Dispose()
+		{
+			msg_content = default;
+			frameOpCode = default;
+#if FANTASY_NET || FANTASY_UNITY
+			GetScene().MessagePoolComponent.Return<G2C_Test2>(this);
+#endif
+		}
+		public uint OpCode() { return OuterOpcode.G2C_Test2; }
+		[ProtoMember(1)]
+		public string msg_content { get; set; }
+		[ProtoMember(2)]
+		public long frameOpCode { get; set; }
+	}
 }
