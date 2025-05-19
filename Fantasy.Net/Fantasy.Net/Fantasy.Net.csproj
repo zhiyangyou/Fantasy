@@ -22,7 +22,7 @@
         <Nullable>enable</Nullable>
         <AssemblyName>Fantasy-Net</AssemblyName>
         <TargetFrameworks>net8.0;net9.0</TargetFrameworks>
-        <LangVersion>default</LangVersion>
+        <LangVersion>preview</LangVersion>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
