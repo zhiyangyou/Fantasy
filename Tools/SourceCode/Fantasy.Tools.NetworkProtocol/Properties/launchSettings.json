@@ -4,7 +4,7 @@
     "Fantasy.Tools.NetworkProtocol": {
       "commandName": "Project",
       "environmentVariables": {},
-      "commandLineArgs": "--ExportPlatform 3"
+      "commandLineArgs": "--ExportPlatform 1"
     }
   }
 }
