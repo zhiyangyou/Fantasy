@@ -7,119 +7,16 @@ package Fantasy.Network.Message;
 // 使用方式:
 // 在message协议上方添加// Protocol+空格+协议名字
 // 例如:// Protocol ProtoBuf 或 // Protocol MemoryPack
-message C2G_TestMessage // IMessage
-{
-	string Tag = 1;
-}
-message C2G_TestRequest // IRequest,G2C_TestResponse
-{
-	string Tag = 1;
-}
-message G2C_TestResponse // IResponse
-{
-	string Tag = 1;
-}
-message C2G_TestRequestPushMessage // IMessage
-{
 
-}
-/// Gate服务器推送一个消息给客户端
-message G2C_PushMessage // IMessage
-{
-	string Tag = 1;
-}
-message C2G_CreateAddressableRequest // IRequest,G2C_CreateAddressableResponse
-{
 
-}
-message G2C_CreateAddressableResponse // IResponse
+message Send_Test1 // IRequest ,Rcv_Test1
 {
+  string user_name = 1 ;
+  string pass_word = 2 ;
+}
 
-}
-message C2M_TestMessage // IAddressableRouteMessage
+message Rcv_Test1 // IResponse
 {
-	string Tag = 1;
-}
-message C2M_TestRequest // IAddressableRouteRequest,M2C_TestResponse
-{
-	string Tag = 1;
-}
-message M2C_TestResponse // IAddressableRouteResponse
-{
-	string Tag = 1;
-}
-/// 通知Gate服务器创建一个Chat的Route连接
-message C2G_CreateChatRouteRequest // IRequest,G2C_CreateChatRouteResponse
-{
-
-}
-message G2C_CreateChatRouteResponse // IResponse
-{
-
-}
-/// 发送一个Route消息给Chat
-message C2Chat_TestMessage // ICustomRouteMessage,ChatRoute
-{
-	string Tag = 1;
-}
-/// 发送一个RPCRoute消息给Chat
-message C2Chat_TestMessageRequest // ICustomRouteRequest,Chat2C_TestMessageResponse,ChatRoute
-{
-	string Tag = 1;
-}
-message Chat2C_TestMessageResponse // ICustomRouteResponse
-{
-	string Tag = 1;
-}
-/// 发送一个RPC消息给Map，让Map里的Entity转移到另外一个Map上
-message C2M_MoveToMapRequest // IAddressableRouteRequest,M2C_MoveToMapResponse
-{
-
-}
-message M2C_MoveToMapResponse // IAddressableRouteResponse
-{
-
-}
-/// 发送一个消息给Gate，让Gate发送一个Addressable消息给MAP
-message C2G_SendAddressableToMap // IMessage
-{
-	string Tag = 1;
-}
-/// 发送一个消息给Chat，让Chat服务器主动推送一个RouteMessage消息给客户端
-message C2Chat_TestRequestPushMessage // ICustomRouteMessage,ChatRoute
-{
-
-}
-/// Chat服务器主动推送一个消息给客户端
-message Chat2C_PushMessage // ICustomRouteMessage,ChatRoute
-{
-	string Tag = 1;
-}
-/// 客户端发送给Gate服务器通知map服务器创建一个SubScene
-message C2G_CreateSubSceneRequest // IRequest,G2C_CreateSubSceneResponse
-{
-
-}
-message G2C_CreateSubSceneResponse // IResponse
-{
-
-}
-/// 客户端通知Gate服务器给SubScene发送一个消息
-message C2G_SendToSubSceneMessage // IMessage
-{
-
-}
-/// 客户端通知Gate服务器创建一个SubScene的Address消息
-message C2G_CreateSubSceneAddressableRequest // IRequest,G2C_CreateSubSceneAddressableResponse
-{
-
-}
-message G2C_CreateSubSceneAddressableResponse // IResponse
-{
-
-}
-/// 客户端向SubScene发送一个测试消息
-message C2SubScene_TestMessage // IAddressableRouteMessage
-{
-	string Tag = 1;
+  bool success = 1;
+  string error_msg = 2;
 }

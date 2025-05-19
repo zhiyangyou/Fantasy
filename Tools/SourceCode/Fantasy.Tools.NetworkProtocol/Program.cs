@@ -22,7 +22,6 @@ catch (Exception e)
 }
 finally
 {
-    Log.Info("按任意键退出程序");
-    Console.ReadKey();
+    Log.Info("执行完成, 程序退出");
     Environment.Exit(0);
 }
