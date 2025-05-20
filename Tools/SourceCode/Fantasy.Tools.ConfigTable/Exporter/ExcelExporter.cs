@@ -189,7 +189,7 @@ public sealed class ExcelExporter
         Find();
         Parsing();
         ExportToBinary();
-        File.WriteAllText(_versionFilePath, JsonConvert.SerializeObject(VersionInfo));
+        File.WriteAllText(_versionFilePath, JsonConvert.SerializeObject(VersionInfo,Formatting.Indented));
         CustomExport();
         RemoveConfigCS();
     }
