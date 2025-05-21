@@ -13,12 +13,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Benchmark\" />
-      <Folder Include="Outer\Game\" />
-      <Folder Include="Outer\NormalMessage\" />
-      <Folder Include="Outer\NormalMessage\Gate\" />
-      <Folder Include="Outer\RouteMessage\" />
-      <Folder Include="Outer\SubScene\" />
+      <Folder Include="Handlers\" />
     </ItemGroup>
 
 </Project>

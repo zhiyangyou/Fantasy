@@ -1,0 +1,44 @@
+﻿using Fantasy.Async;
+using Fantasy.DataBase;
+using Fantasy.Entitas;
+using Fantasy.Helper;
+using Fantasy.Model;
+using Hotfix.Model;
+
+namespace Hotfix.System;
+
+/// <summary>
+/// 账号先关的逻辑类
+/// </summary>
+public static class System_AuthenticationAccount {
+    public static async FTask<uint> RegisterAccount(this Component_AuthenticationAccount self, string account, string password) {
+        if (string.IsNullOrEmpty(account) || string.IsNullOrEmpty(password)) {
+            return 1000; // 账号或是密码为空
+        }
+        if (self._dicAllAccountCache.ContainsKey(account)) {
+            return 1001; // 账号已经存在
+        }
+
+        // TODO 数据库查询 是否哟
+        IDataBase dataBase = self.Scene.World.DataBase;
+        var hasExist = await dataBase.Exist<Model_Account>(modelAccount => modelAccount.account == account);
+        if (hasExist) {
+            return 1001;
+        }
+
+        // 
+        Model_Account accountModel = Entity.Create<Model_Account>(self.Scene, true, false);
+        accountModel.account = account;
+        accountModel.password = password;
+        accountModel.createTime = TimeHelper.Now;
+
+        if (!self._dicAllAccountCache.TryAdd(accountModel.account, accountModel)) {
+            return 1001;
+        }
+        
+        // 回写数据库
+        await dataBase.Save<Model_Account>(accountModel);
+        
+        return 0; // 注册成功
+    }
+}

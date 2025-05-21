@@ -18,6 +18,53 @@ using Fantasy.Serialize;
 namespace Fantasy
 {	
 	[ProtoContract]
+	public partial class Send_RegisterAccount : AMessage, IRequest, IProto
+	{
+		public static Send_RegisterAccount Create(Scene scene)
+		{
+			return scene.MessagePoolComponent.Rent<Send_RegisterAccount>();
+		}
+		public override void Dispose()
+		{
+			user_name = default;
+			pass_word = default;
+#if FANTASY_NET || FANTASY_UNITY
+			GetScene().MessagePoolComponent.Return<Send_RegisterAccount>(this);
+#endif
+		}
+		[ProtoIgnore]
+		public Rcv_RegisterAccount ResponseType { get; set; }
+		public uint OpCode() { return OuterOpcode.Send_RegisterAccount; }
+		[ProtoMember(1)]
+		public string user_name { get; set; }
+		[ProtoMember(2)]
+		public string pass_word { get; set; }
+	}
+	[ProtoContract]
+	public partial class Rcv_RegisterAccount : AMessage, IResponse, IProto
+	{
+		public static Rcv_RegisterAccount Create(Scene scene)
+		{
+			return scene.MessagePoolComponent.Rent<Rcv_RegisterAccount>();
+		}
+		public override void Dispose()
+		{
+			ErrorCode = default;
+			user_name = default;
+			pass_word = default;
+#if FANTASY_NET || FANTASY_UNITY
+			GetScene().MessagePoolComponent.Return<Rcv_RegisterAccount>(this);
+#endif
+		}
+		public uint OpCode() { return OuterOpcode.Rcv_RegisterAccount; }
+		[ProtoMember(1)]
+		public string user_name { get; set; }
+		[ProtoMember(2)]
+		public string pass_word { get; set; }
+		[ProtoMember(3)]
+		public uint ErrorCode { get; set; }
+	}
+	[ProtoContract]
 	public partial class Send_Test1 : AMessage, IRequest, IProto
 	{
 		public static Send_Test1 Create(Scene scene)

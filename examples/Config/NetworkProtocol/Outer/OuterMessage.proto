@@ -9,6 +9,18 @@ package Fantasy.Network.Message;
 // 例如:// Protocol ProtoBuf 或 // Protocol MemoryPack
 
 
+message Send_RegisterAccount // IRequest ,Rcv_RegisterAccount
+{
+  string user_name = 1 ;
+  string pass_word = 2 ;
+}
+
+message Rcv_RegisterAccount // IResponse
+{
+  string user_name = 1 ;
+  string pass_word = 2 ;
+}
+
 message Send_Test1 // IRequest ,Rcv_Test1
 {
   string user_name = 1 ;
