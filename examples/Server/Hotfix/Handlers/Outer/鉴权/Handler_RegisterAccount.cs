@@ -10,12 +10,17 @@ public class Handler_RegisterAccount : MessageRPC<Send_RegisterAccount, Rcv_Regi
         var accountCmpt = session.Scene.GetComponent<Component_AuthenticationAccount>();
         uint retCode = await accountCmpt.RegisterAccount(request.user_name, request.pass_word);
         response.ErrorCode = retCode;
-        
+
         if (retCode == 0) {
             response.user_name = request.user_name;
             response.pass_word = request.pass_word;
         }
-        Log.Info($"注册账号结果:{retCode}");
+
+       
+        string privateKey = "";
+        string publicKey = "";
+        RSAEncryptHelper.RSAKey(out privateKey, out publicKey);
+
         await FTask.CompletedTask;
     }
 }

@@ -19,7 +19,8 @@ public class Event_OnSceneCreate : IAsyncEvent {
         else {
             if (scene.SceneType == (int)SceneType.Authentication) {
                 scene.AddComponent<Component_AuthenticationAccount>();
-                Log.Info("鉴权服务添加组件: Component_AuthenticationAccount");
+                scene.AddComponent<Component_RSAEncrypt>();
+                Log.Info($"鉴权服务添加组件: {nameof(Component_AuthenticationAccount)} {nameof(Component_RSAEncrypt)}");
             }
         }
         return FTask.Create();

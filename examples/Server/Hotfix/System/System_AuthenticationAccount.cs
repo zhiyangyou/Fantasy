@@ -29,16 +29,16 @@ public static class System_AuthenticationAccount {
         // 
         Model_Account accountModel = Entity.Create<Model_Account>(self.Scene, true, false);
         accountModel.account = account;
-        accountModel.password = password;
+        accountModel.password = self.Scene.GetComponent<Component_RSAEncrypt>().EncryptPassword(password);
         accountModel.createTime = TimeHelper.Now;
 
         if (!self._dicAllAccountCache.TryAdd(accountModel.account, accountModel)) {
             return 1001;
         }
-        
+
         // 回写数据库
         await dataBase.Save<Model_Account>(accountModel);
-        
+
         return 0; // 注册成功
     }
 }
