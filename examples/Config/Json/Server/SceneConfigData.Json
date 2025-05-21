@@ -4,4 +4,5 @@
 {"Id":1003,"ProcessConfigId":1,"WorldConfigId":1,"SceneRuntimeType":"MultiThread","SceneTypeString":"Map","NetworkProtocol":null,"OuterPort":0,"InnerPort":11003,"SceneType":4},
 {"Id":1004,"ProcessConfigId":1,"WorldConfigId":1,"SceneRuntimeType":"MultiThread","SceneTypeString":"Chat","NetworkProtocol":null,"OuterPort":0,"InnerPort":11004,"SceneType":8},
 {"Id":1005,"ProcessConfigId":1,"WorldConfigId":1,"SceneRuntimeType":"MultiThread","SceneTypeString":"Map","NetworkProtocol":null,"OuterPort":0,"InnerPort":11005,"SceneType":4},
+{"Id":1006,"ProcessConfigId":1,"WorldConfigId":1,"SceneRuntimeType":"MultiThread","SceneTypeString":"Authentication","NetworkProtocol":"TCP","OuterPort":20001,"InnerPort":11007,"SceneType":1},
 ]}
