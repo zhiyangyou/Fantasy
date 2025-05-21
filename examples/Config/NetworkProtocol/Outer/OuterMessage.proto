@@ -17,30 +17,36 @@ message Send_RegisterAccount // IRequest ,Rcv_RegisterAccount
 
 message Rcv_RegisterAccount // IResponse
 {
-  string user_name = 1 ;
-  string pass_word = 2 ;
+  string user_name = 1;
+  string pass_word = 2;
 }
 
-message Send_Test1 // IRequest ,Rcv_Test1
+
+
+message Send_GetLoginToken // IRequest ,Rcv_GetLoginToken
 {
-  string user_name = 1 ;
-  string pass_word = 2 ;
+  string account_name = 1; // 账号
+  string pass_word = 2; // 密码
 }
 
-message Rcv_Test1 // IResponse
+message Rcv_GetLoginToken // IResponse
 {
-  bool success = 1;
-  string error_msg = 2;
+  string token = 1; // 登陆令牌
+  string login_address = 2; // 登录地址
+  int64 account_id = 3; // 账号id
 }
 
-message C2G_Test2 // IMessage
+message Send_LoginGate // IRequest ,Rcv_LoginGate
 {
-  string msg_content = 1;
-  int64 frameOpCode = 2;
+  string account_name = 1;
+  string token = 2;
 }
 
-message G2C_Test2 // IMessage
+message Rcv_LoginGate // IResponse
 {
-  string msg_content = 1;
-  int64 frameOpCode = 2;
+  int64 account_id = 1; // 账号id
+  int64 level = 2;
+  int64 gold = 3;
+  int64 diamond = 4;
+
 }

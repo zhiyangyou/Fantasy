@@ -65,92 +65,106 @@ namespace Fantasy
 		public uint ErrorCode { get; set; }
 	}
 	[ProtoContract]
-	public partial class Send_Test1 : AMessage, IRequest, IProto
+	public partial class Send_GetLoginToken : AMessage, IRequest, IProto
 	{
-		public static Send_Test1 Create(Scene scene)
+		public static Send_GetLoginToken Create(Scene scene)
 		{
-			return scene.MessagePoolComponent.Rent<Send_Test1>();
+			return scene.MessagePoolComponent.Rent<Send_GetLoginToken>();
 		}
 		public override void Dispose()
 		{
-			user_name = default;
+			account_name = default;
 			pass_word = default;
 #if FANTASY_NET || FANTASY_UNITY
-			GetScene().MessagePoolComponent.Return<Send_Test1>(this);
+			GetScene().MessagePoolComponent.Return<Send_GetLoginToken>(this);
 #endif
 		}
 		[ProtoIgnore]
-		public Rcv_Test1 ResponseType { get; set; }
-		public uint OpCode() { return OuterOpcode.Send_Test1; }
+		public Rcv_GetLoginToken ResponseType { get; set; }
+		public uint OpCode() { return OuterOpcode.Send_GetLoginToken; }
 		[ProtoMember(1)]
-		public string user_name { get; set; }
+		public string account_name { get; set; }
 		[ProtoMember(2)]
 		public string pass_word { get; set; }
 	}
 	[ProtoContract]
-	public partial class Rcv_Test1 : AMessage, IResponse, IProto
+	public partial class Rcv_GetLoginToken : AMessage, IResponse, IProto
 	{
-		public static Rcv_Test1 Create(Scene scene)
+		public static Rcv_GetLoginToken Create(Scene scene)
 		{
-			return scene.MessagePoolComponent.Rent<Rcv_Test1>();
+			return scene.MessagePoolComponent.Rent<Rcv_GetLoginToken>();
 		}
 		public override void Dispose()
 		{
 			ErrorCode = default;
-			success = default;
-			error_msg = default;
+			token = default;
+			login_address = default;
+			account_id = default;
 #if FANTASY_NET || FANTASY_UNITY
-			GetScene().MessagePoolComponent.Return<Rcv_Test1>(this);
+			GetScene().MessagePoolComponent.Return<Rcv_GetLoginToken>(this);
 #endif
 		}
-		public uint OpCode() { return OuterOpcode.Rcv_Test1; }
+		public uint OpCode() { return OuterOpcode.Rcv_GetLoginToken; }
 		[ProtoMember(1)]
-		public bool success { get; set; }
+		public string token { get; set; }
 		[ProtoMember(2)]
-		public string error_msg { get; set; }
+		public string login_address { get; set; }
 		[ProtoMember(3)]
+		public long account_id { get; set; }
+		[ProtoMember(4)]
 		public uint ErrorCode { get; set; }
 	}
 	[ProtoContract]
-	public partial class C2G_Test2 : AMessage, IMessage, IProto
+	public partial class Send_LoginGate : AMessage, IRequest, IProto
 	{
-		public static C2G_Test2 Create(Scene scene)
+		public static Send_LoginGate Create(Scene scene)
 		{
-			return scene.MessagePoolComponent.Rent<C2G_Test2>();
+			return scene.MessagePoolComponent.Rent<Send_LoginGate>();
 		}
 		public override void Dispose()
 		{
-			msg_content = default;
-			frameOpCode = default;
+			account_name = default;
+			token = default;
 #if FANTASY_NET || FANTASY_UNITY
-			GetScene().MessagePoolComponent.Return<C2G_Test2>(this);
+			GetScene().MessagePoolComponent.Return<Send_LoginGate>(this);
 #endif
 		}
-		public uint OpCode() { return OuterOpcode.C2G_Test2; }
+		[ProtoIgnore]
+		public Rcv_LoginGate ResponseType { get; set; }
+		public uint OpCode() { return OuterOpcode.Send_LoginGate; }
 		[ProtoMember(1)]
-		public string msg_content { get; set; }
+		public string account_name { get; set; }
 		[ProtoMember(2)]
-		public long frameOpCode { get; set; }
+		public string token { get; set; }
 	}
 	[ProtoContract]
-	public partial class G2C_Test2 : AMessage, IMessage, IProto
+	public partial class Rcv_LoginGate : AMessage, IResponse, IProto
 	{
-		public static G2C_Test2 Create(Scene scene)
+		public static Rcv_LoginGate Create(Scene scene)
 		{
-			return scene.MessagePoolComponent.Rent<G2C_Test2>();
+			return scene.MessagePoolComponent.Rent<Rcv_LoginGate>();
 		}
 		public override void Dispose()
 		{
-			msg_content = default;
-			frameOpCode = default;
+			ErrorCode = default;
+			account_id = default;
+			level = default;
+			gold = default;
+			diamond = default;
 #if FANTASY_NET || FANTASY_UNITY
-			GetScene().MessagePoolComponent.Return<G2C_Test2>(this);
+			GetScene().MessagePoolComponent.Return<Rcv_LoginGate>(this);
 #endif
 		}
-		public uint OpCode() { return OuterOpcode.G2C_Test2; }
+		public uint OpCode() { return OuterOpcode.Rcv_LoginGate; }
 		[ProtoMember(1)]
-		public string msg_content { get; set; }
+		public long account_id { get; set; }
 		[ProtoMember(2)]
-		public long frameOpCode { get; set; }
+		public long level { get; set; }
+		[ProtoMember(3)]
+		public long gold { get; set; }
+		[ProtoMember(4)]
+		public long diamond { get; set; }
+		[ProtoMember(5)]
+		public uint ErrorCode { get; set; }
 	}
 }
