@@ -22,8 +22,12 @@ public class Event_OnSceneCreate : IAsyncEvent {
                 scene.AddComponent<Component_AuthenticationAccount>();
                 scene.AddComponent<Component_RSAEncrypt>();
                 scene.AddComponent<Component_SceneConfig>();
-                Log.Info($"鉴权服务添加组件: {nameof(Component_AuthenticationAccount)} {nameof(Component_RSAEncrypt)}");
-            }
+                
+            } 
+            if (scene.SceneType == (int)SceneType.Gate) {
+                scene.AddComponent<Component_RSAEncrypt>();
+                scene.AddComponent<Component_SceneConfig>();
+            } 
         }
         return FTask.Create();
     }

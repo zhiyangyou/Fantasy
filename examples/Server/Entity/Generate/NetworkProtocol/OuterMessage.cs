@@ -100,6 +100,7 @@ namespace Fantasy
 			token = default;
 			login_address = default;
 			account_id = default;
+			scene_config_id = default;
 #if FANTASY_NET || FANTASY_UNITY
 			GetScene().MessagePoolComponent.Return<Rcv_GetLoginToken>(this);
 #endif
@@ -112,6 +113,8 @@ namespace Fantasy
 		[ProtoMember(3)]
 		public long account_id { get; set; }
 		[ProtoMember(4)]
+		public uint scene_config_id { get; set; }
+		[ProtoMember(5)]
 		public uint ErrorCode { get; set; }
 	}
 	[ProtoContract]
@@ -123,8 +126,9 @@ namespace Fantasy
 		}
 		public override void Dispose()
 		{
-			account_name = default;
+			account_id = default;
 			token = default;
+			scene_config_id = default;
 #if FANTASY_NET || FANTASY_UNITY
 			GetScene().MessagePoolComponent.Return<Send_LoginGate>(this);
 #endif
@@ -133,9 +137,11 @@ namespace Fantasy
 		public Rcv_LoginGate ResponseType { get; set; }
 		public uint OpCode() { return OuterOpcode.Send_LoginGate; }
 		[ProtoMember(1)]
-		public string account_name { get; set; }
+		public long account_id { get; set; }
 		[ProtoMember(2)]
 		public string token { get; set; }
+		[ProtoMember(3)]
+		public uint scene_config_id { get; set; }
 	}
 	[ProtoContract]
 	public partial class Rcv_LoginGate : AMessage, IResponse, IProto

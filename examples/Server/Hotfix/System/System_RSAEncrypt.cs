@@ -21,7 +21,13 @@ public static class System_RSAEncrypt {
     }
 
     public static bool VerifyToken(this Component_RSAEncrypt self, string token, long accountID, uint sceneConfigID) {
-        var descryptStr = RSAEncryptHelper.RSAEncrypt(self.PublicKey, token);
+        if (string.IsNullOrEmpty(token)) {
+            return false;
+        }
+        if (accountID <= 0) {
+            return false;
+        }
+        var descryptStr = RSAEncryptHelper.RSADecrypt(self.PrivateKey, token);
         string compareStr = $"{accountID},{sceneConfigID}";
         return string.Equals(descryptStr, compareStr);
     }

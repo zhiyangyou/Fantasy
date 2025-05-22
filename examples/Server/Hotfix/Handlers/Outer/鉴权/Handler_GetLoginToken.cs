@@ -18,12 +18,14 @@ public class Handler_GetLoginToken : MessageRPC<Send_GetLoginToken, Rcv_GetLogin
         // 分配gate服务
         var (address, sceneConfigId) = session.Scene.GetComponent<Component_SceneConfig>().GetGate(response.account_id);
         // 生成token
-        string token = session.Scene.GetComponent<Component_RSAEncrypt>().GenerateToken(response.account_id, sceneConfigId);
-        
+        var account_id = result.Item2.Id;
+        string token = session.Scene.GetComponent<Component_RSAEncrypt>().GenerateToken(account_id, sceneConfigId);
         if (code == 0) {
             response.login_address = address;
             response.token = token;
-            response.account_id = response.account_id;
+            response.account_id = account_id;
+            response.scene_config_id = sceneConfigId;
+            Log.Info($"account_id:{account_id}");
         }
         await FTask.CompletedTask;
     }

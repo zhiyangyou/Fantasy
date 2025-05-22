@@ -32,6 +32,7 @@ public static class System_AuthenticationAccount {
             accountModel.account = account;
             accountModel.password = self.Scene.GetComponent<Component_RSAEncrypt>().EncryptPassword(password);
             accountModel.createTime = TimeHelper.Now;
+            accountModel.InitGameAttrs();
 
             if (!self._dicAllAccountCache.TryAdd(accountModel.account, accountModel)) {
                 return 1001;
@@ -59,13 +60,12 @@ public static class System_AuthenticationAccount {
             }
 
             var componentRsa = self.Scene.GetComponent<Component_RSAEncrypt>();
-            var isRight = componentRsa.VerifyPassword(password,accountModel.password);
+            var isRight = componentRsa.VerifyPassword(password, accountModel.password);
             if (!isRight) {
                 return (1007, null);
             }
             accountModel.loginTime = TimeHelper.Now;
-
-            self._dicAllAccountCache.Add(accountModel.account, accountModel);
+            self._dicAllAccountCache.AddOrUpdate(accountModel.account, (_) => accountModel, (_, __) => accountModel);
             // 回写数据库
             await dataBase.Save<Model_Account>(accountModel);
             return (0, accountModel); // 登录成功
