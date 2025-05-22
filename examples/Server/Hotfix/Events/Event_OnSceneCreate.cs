@@ -2,6 +2,7 @@
 using Fantasy.Async;
 using Fantasy.Event;
 using Fantasy.Model;
+using Hotfix.Component;
 using Hotfix.Share;
 
 namespace Hotfix;
@@ -27,6 +28,7 @@ public class Event_OnSceneCreate : IAsyncEvent {
             if (scene.SceneType == (int)SceneType.Gate) {
                 scene.AddComponent<Component_RSAEncrypt>();
                 scene.AddComponent<Component_SceneConfig>();
+                scene.AddComponent<Component_RoleManager>();
             } 
         }
         return FTask.Create();

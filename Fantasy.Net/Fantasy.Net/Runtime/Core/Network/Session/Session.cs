@@ -143,6 +143,7 @@ namespace Fantasy.Network
         /// </summary>
         public override void Dispose()
         {
+            // Log.Error("主动发起了断开连接");
             if (IsDisposed)
             {
                 return;

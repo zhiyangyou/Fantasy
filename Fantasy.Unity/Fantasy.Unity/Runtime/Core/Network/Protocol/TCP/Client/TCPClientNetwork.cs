@@ -13,6 +13,8 @@ using Fantasy.Helper;
 using Fantasy.Network.Interface;
 using Fantasy.PacketParser;
 using Fantasy.Serialize;
+using UnityEngine;
+
 // ReSharper disable ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
 #pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
@@ -202,17 +204,23 @@ namespace Fantasy.Network.TCP
 #endif
                     await _pipe.Writer.FlushAsync();
                 }
-                catch (SocketException)
+                catch (SocketException e)
                 {
+                    Debug.LogError($"socket 发生异常 :{e.Message}");
+                    Debug.LogException(e);
                     Dispose();
                     break;
                 }
-                catch (OperationCanceledException)
+                catch (OperationCanceledException e)
                 {
+                    Debug.LogError("socket 发生异常");
+                    Debug.LogException(e);
                     break;
                 }
-                catch (ObjectDisposedException)
+                catch (ObjectDisposedException e)
                 {
+                    Debug.LogError("socket 发生异常");
+                    Debug.LogException(e);
                     Dispose();
                     break;
                 }

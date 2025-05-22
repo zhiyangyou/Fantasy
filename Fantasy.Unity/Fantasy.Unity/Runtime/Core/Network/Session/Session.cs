@@ -13,6 +13,7 @@ using Fantasy.PacketParser;
 using Fantasy.PacketParser.Interface;
 using Fantasy.Scheduler;
 using Fantasy.Serialize;
+using UnityEngine;
 #if FANTASY_NET
 using Fantasy.Platform.Net;
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
@@ -154,7 +155,7 @@ namespace Fantasy.Network
             RemoteEndPoint = null;
             NetworkMessageScheduler = null;
             base.Dispose();
-
+            Debug.LogError("do dispose session..");
             // 终止所有等待中的请求回调
             foreach (var requestCallback in RequestCallback.Values.ToArray())
             {

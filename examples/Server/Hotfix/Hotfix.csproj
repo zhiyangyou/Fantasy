@@ -13,6 +13,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="Gate\" />
       <Folder Include="Handlers\" />
       <Folder Include="Share\" />
       <Folder Include="Tools\" />
