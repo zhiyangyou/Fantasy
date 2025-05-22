@@ -20,9 +20,28 @@ public class Component_RoleManager : Entity {
 
     #region public
 
-    public async FTask<List<RoleData>> GetRoleDatas( long account_id) {
-        var db =  this.Scene.World.DataBase;
-        var models =  await db.Query<Model_Role>(data => data.account_id == account_id);
+    public async FTask<bool> RoleExists(long role_uid) {
+        if (role_uid <= 0) {
+            return false;
+        }
+        var db = this.Scene.World.DataBase;
+        var exist = await db.Exist<Model_Role>(role => role.Id == role_uid);
+
+        return exist;
+    }
+
+    public async FTask<Model_Role?> GetRole(long role_uid) {
+        if (role_uid <= 0) {
+            return null;
+        }
+        var db = this.Scene.World.DataBase;
+        var ret = await db.First<Model_Role>(role => role.Id == role_uid);
+        return ret;
+    }
+
+    public async FTask<List<RoleData>> GetRoleDatas(long account_id) {
+        var db = this.Scene.World.DataBase;
+        var models = await db.Query<Model_Role>(data => data.account_id == account_id);
         return models.Select(role => role.ToRoleData()).ToList();
     }
 

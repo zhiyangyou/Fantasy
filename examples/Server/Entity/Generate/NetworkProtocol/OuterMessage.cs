@@ -268,7 +268,7 @@ namespace Fantasy
 		public Rcv_SelectRole ResponseType { get; set; }
 		public uint OpCode() { return OuterOpcode.Send_SelectRole; }
 		[ProtoMember(1)]
-		public int role_uid { get; set; }
+		public long role_uid { get; set; }
 		[ProtoMember(2)]
 		public long account_id { get; set; }
 	}

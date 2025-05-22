@@ -14,7 +14,10 @@ public class Handler_GetLoginToken : MessageRPC<Send_GetLoginToken, Rcv_GetLogin
         var result = await authenticationAccountComponent.LoginAccount(request.account_name, request.pass_word);
         var code = result.Item1;
         response.ErrorCode = code;
-
+        if (code != 0) {
+            return;
+        }
+        
         // 分配gate服务
         var (address, sceneConfigId) = session.Scene.GetComponent<Component_SceneConfig>().GetGate(response.account_id);
         // 生成token
