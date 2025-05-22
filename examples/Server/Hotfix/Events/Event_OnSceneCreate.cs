@@ -23,6 +23,7 @@ public class Event_OnSceneCreate : IAsyncEvent {
                 scene.AddComponent<Component_AuthenticationAccount>();
                 scene.AddComponent<Component_RSAEncrypt>();
                 scene.AddComponent<Component_SceneConfig>();
+                scene.AddComponent<Component_RoleManager>();
                 
             } 
             if (scene.SceneType == (int)SceneType.Gate) {

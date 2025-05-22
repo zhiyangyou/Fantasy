@@ -3,6 +3,7 @@ using Fantasy.Async;
 using Fantasy.Model;
 using Fantasy.Network;
 using Fantasy.Network.Interface;
+using Hotfix.Component;
 using Hotfix.Model;
 using Hotfix.System;
 
@@ -16,11 +17,13 @@ public class Handler_LoginGate : MessageRPC<Send_LoginGate, Rcv_LoginGate> {
             var db = session.Scene.World.DataBase;
             var modelAccount = await db.First<Model_Account>(account => account.Id == request.account_id);
             if (modelAccount != null) {
+                var roleDatas = await session.Scene.GetComponent<Component_RoleManager>().GetRoleDatas(request.account_id);
                 response.ErrorCode = 0;
                 response.account_id = request.account_id;
                 response.diamond = modelAccount.diamonds;
                 response.level = modelAccount.level;
                 response.gold = modelAccount.golds;
+                response.role_datas = roleDatas;
             }
             else {
                 response.ErrorCode = 1002;

@@ -50,6 +50,7 @@ message Rcv_LoginGate // IResponse
   int64 level = 2;
   int64 gold = 3;
   int64 diamond = 4;
+  repeated RoleData role_datas = 5;
 }
 
 

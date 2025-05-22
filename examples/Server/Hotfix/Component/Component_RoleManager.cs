@@ -1,5 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using System.ComponentModel.DataAnnotations.Schema;
+using Fantasy;
 using Fantasy.Async;
 using Fantasy.Entitas;
 using Hotfix.Model;
@@ -18,6 +19,12 @@ public class Component_RoleManager : Entity {
 
 
     #region public
+
+    public async FTask<List<RoleData>> GetRoleDatas( long account_id) {
+        var db =  this.Scene.World.DataBase;
+        var models =  await db.Query<Model_Role>(data => data.account_id == account_id);
+        return models.Select(role => role.ToRoleData()).ToList();
+    }
 
     public async FTask<(uint errorCode, Model_Role? role)> CreateRole(int role_id, long account_id, string role_name) {
         if (role_id == 0 || account_id <= 0 || string.IsNullOrEmpty(role_name)) {

@@ -157,6 +157,7 @@ namespace Fantasy
 			level = default;
 			gold = default;
 			diamond = default;
+			role_datas.Clear();
 #if FANTASY_NET || FANTASY_UNITY
 			GetScene().MessagePoolComponent.Return<Rcv_LoginGate>(this);
 #endif
@@ -171,6 +172,8 @@ namespace Fantasy
 		[ProtoMember(4)]
 		public long diamond { get; set; }
 		[ProtoMember(5)]
+		public List<RoleData> role_datas = new List<RoleData>();
+		[ProtoMember(6)]
 		public uint ErrorCode { get; set; }
 	}
 	[ProtoContract]

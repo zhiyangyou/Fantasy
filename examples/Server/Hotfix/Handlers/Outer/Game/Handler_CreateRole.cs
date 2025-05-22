@@ -14,12 +14,7 @@ public class Handler_CreateRole : MessageRPC<Send_CreateRole, Rcv_CreateRole> {
         response.ErrorCode = tp.errorCode;
         if (response.ErrorCode == 0) {
             var modelRole = tp.role;
-            response.role_data = new RoleData() {
-                role_id = modelRole.role_id,
-                role_name = modelRole.role_name,
-                level = modelRole.level,
-                uid = modelRole.Id,
-            };
+            response.role_data = modelRole.ToRoleData();
         }
         await FTask.CompletedTask;
     }
