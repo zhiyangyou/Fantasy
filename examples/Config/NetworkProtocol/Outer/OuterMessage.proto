@@ -34,7 +34,7 @@ message Rcv_GetLoginToken // IResponse
   string token = 1; // 登陆令牌
   string login_address = 2; // 登录地址
   int64 account_id = 3; // 账号id
-  uint32 scene_config_id = 4; 
+  uint32 scene_config_id = 4;
 }
 
 message Send_LoginGate // IRequest ,Rcv_LoginGate
@@ -50,5 +50,36 @@ message Rcv_LoginGate // IResponse
   int64 level = 2;
   int64 gold = 3;
   int64 diamond = 4;
+}
 
+
+message RoleData
+{
+  int64 uid = 1; // 角色唯一id
+  string role_name = 2; // 名字
+  int32 level = 3; // 等级
+  int32 role_id = 4; // 用于区分职业 
+}
+
+message Send_CreateRole // IRequest ,Rcv_CreateRole
+{
+  int32  role_id = 1;
+  int64 account_id = 2;
+  string role_name = 3;
+}
+
+message Rcv_CreateRole  // IResponse
+{
+  RoleData role_data = 1;
+}
+
+message Send_SelectRole // IRequest ,Rcv_SelectRole
+{
+  int32 role_uid = 1;
+  int64 account_id = 2;
+}
+
+message Rcv_SelectRole  // IResponse
+{
+  RoleData role_data = 3;
 }

@@ -24,8 +24,7 @@ public class Handler_GetLoginToken : MessageRPC<Send_GetLoginToken, Rcv_GetLogin
             response.login_address = address;
             response.token = token;
             response.account_id = account_id;
-            response.scene_config_id = sceneConfigId;
-            Log.Info($"account_id:{account_id}");
+            response.scene_config_id = sceneConfigId; 
         }
         await FTask.CompletedTask;
     }

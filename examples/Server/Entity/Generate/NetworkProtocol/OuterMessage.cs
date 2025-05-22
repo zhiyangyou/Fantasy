@@ -173,4 +173,121 @@ namespace Fantasy
 		[ProtoMember(5)]
 		public uint ErrorCode { get; set; }
 	}
+	[ProtoContract]
+	public partial class RoleData : AMessage, IProto
+	{
+		public static RoleData Create(Scene scene)
+		{
+			return scene.MessagePoolComponent.Rent<RoleData>();
+		}
+		public override void Dispose()
+		{
+			uid = default;
+			role_name = default;
+			level = default;
+			role_id = default;
+#if FANTASY_NET || FANTASY_UNITY
+			GetScene().MessagePoolComponent.Return<RoleData>(this);
+#endif
+		}
+		[ProtoMember(1)]
+		public long uid { get; set; }
+		[ProtoMember(2)]
+		public string role_name { get; set; }
+		[ProtoMember(3)]
+		public int level { get; set; }
+		[ProtoMember(4)]
+		public int role_id { get; set; }
+	}
+	[ProtoContract]
+	public partial class Send_CreateRole : AMessage, IRequest, IProto
+	{
+		public static Send_CreateRole Create(Scene scene)
+		{
+			return scene.MessagePoolComponent.Rent<Send_CreateRole>();
+		}
+		public override void Dispose()
+		{
+			role_id = default;
+			account_id = default;
+			role_name = default;
+#if FANTASY_NET || FANTASY_UNITY
+			GetScene().MessagePoolComponent.Return<Send_CreateRole>(this);
+#endif
+		}
+		[ProtoIgnore]
+		public Rcv_CreateRole ResponseType { get; set; }
+		public uint OpCode() { return OuterOpcode.Send_CreateRole; }
+		[ProtoMember(1)]
+		public int role_id { get; set; }
+		[ProtoMember(2)]
+		public long account_id { get; set; }
+		[ProtoMember(3)]
+		public string role_name { get; set; }
+	}
+	[ProtoContract]
+	public partial class Rcv_CreateRole : AMessage, IResponse, IProto
+	{
+		public static Rcv_CreateRole Create(Scene scene)
+		{
+			return scene.MessagePoolComponent.Rent<Rcv_CreateRole>();
+		}
+		public override void Dispose()
+		{
+			ErrorCode = default;
+			role_data = default;
+#if FANTASY_NET || FANTASY_UNITY
+			GetScene().MessagePoolComponent.Return<Rcv_CreateRole>(this);
+#endif
+		}
+		public uint OpCode() { return OuterOpcode.Rcv_CreateRole; }
+		[ProtoMember(1)]
+		public RoleData role_data { get; set; }
+		[ProtoMember(2)]
+		public uint ErrorCode { get; set; }
+	}
+	[ProtoContract]
+	public partial class Send_SelectRole : AMessage, IRequest, IProto
+	{
+		public static Send_SelectRole Create(Scene scene)
+		{
+			return scene.MessagePoolComponent.Rent<Send_SelectRole>();
+		}
+		public override void Dispose()
+		{
+			role_uid = default;
+			account_id = default;
+#if FANTASY_NET || FANTASY_UNITY
+			GetScene().MessagePoolComponent.Return<Send_SelectRole>(this);
+#endif
+		}
+		[ProtoIgnore]
+		public Rcv_SelectRole ResponseType { get; set; }
+		public uint OpCode() { return OuterOpcode.Send_SelectRole; }
+		[ProtoMember(1)]
+		public int role_uid { get; set; }
+		[ProtoMember(2)]
+		public long account_id { get; set; }
+	}
+	[ProtoContract]
+	public partial class Rcv_SelectRole : AMessage, IResponse, IProto
+	{
+		public static Rcv_SelectRole Create(Scene scene)
+		{
+			return scene.MessagePoolComponent.Rent<Rcv_SelectRole>();
+		}
+		public override void Dispose()
+		{
+			ErrorCode = default;
+			role_data = default;
+#if FANTASY_NET || FANTASY_UNITY
+			GetScene().MessagePoolComponent.Return<Rcv_SelectRole>(this);
+#endif
+		}
+		public uint OpCode() { return OuterOpcode.Rcv_SelectRole; }
+		[ProtoMember(1)]
+		public RoleData role_data { get; set; }
+		[ProtoMember(2)]
+		public uint ErrorCode { get; set; }
+	}
 }

@@ -8,5 +8,9 @@ namespace Fantasy
 		 public const uint Rcv_GetLoginToken = 402663186;
 		 public const uint Send_LoginGate = 268445459;
 		 public const uint Rcv_LoginGate = 402663187;
+		 public const uint Send_CreateRole = 268445460;
+		 public const uint Rcv_CreateRole = 402663188;
+		 public const uint Send_SelectRole = 268445461;
+		 public const uint Rcv_SelectRole = 402663189;
 	}
 }
