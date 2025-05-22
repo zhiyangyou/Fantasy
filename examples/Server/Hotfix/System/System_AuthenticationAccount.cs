@@ -59,7 +59,7 @@ public static class System_AuthenticationAccount {
             }
 
             var componentRsa = self.Scene.GetComponent<Component_RSAEncrypt>();
-            var isRight = componentRsa.VerifyPassword(password);
+            var isRight = componentRsa.VerifyPassword(password,accountModel.password);
             if (!isRight) {
                 return (1007, null);
             }

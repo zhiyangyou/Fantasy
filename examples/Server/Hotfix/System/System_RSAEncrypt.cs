@@ -10,8 +10,8 @@ public static class System_RSAEncrypt {
         return RSAEncryptHelper.RSAEncrypt(self.PublicKey, password);
     }
 
-    public static bool VerifyPassword(this Component_RSAEncrypt self, string password) {
-        var ret = RSAEncryptHelper.RSADecrypt(self.PrivateKey, password);
+    public static bool VerifyPassword(this Component_RSAEncrypt self, string password, string encryptedPassword) {
+        var ret = RSAEncryptHelper.RSADecrypt(self.PrivateKey, encryptedPassword);
         return string.Equals(ret, password);
     }
 
