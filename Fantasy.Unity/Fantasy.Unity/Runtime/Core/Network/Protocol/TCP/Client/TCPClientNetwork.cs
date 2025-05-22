@@ -205,8 +205,7 @@ namespace Fantasy.Network.TCP
                     await _pipe.Writer.FlushAsync();
                 }
                 catch (SocketException e)
-                {
-                    Debug.LogError($"socket 发生异常 :{e.Message}");
+                { 
                     Debug.LogException(e);
                     Dispose();
                     break;

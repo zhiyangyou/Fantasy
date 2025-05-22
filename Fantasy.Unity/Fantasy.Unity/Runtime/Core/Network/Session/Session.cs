@@ -155,7 +155,6 @@ namespace Fantasy.Network
             RemoteEndPoint = null;
             NetworkMessageScheduler = null;
             base.Dispose();
-            Debug.LogError("do dispose session..");
             // 终止所有等待中的请求回调
             foreach (var requestCallback in RequestCallback.Values.ToArray())
             {
