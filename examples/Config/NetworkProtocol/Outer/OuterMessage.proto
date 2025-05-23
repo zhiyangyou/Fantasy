@@ -82,5 +82,5 @@ message Send_SelectRole // IRequest ,Rcv_SelectRole
 
 message Rcv_SelectRole  // IResponse
 {
-  RoleData role_data = 3;
+  RoleData role_data = 1;
 }
