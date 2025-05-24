@@ -1,0 +1,58 @@
+[
+  {
+    "mapName": "HeDunMaer",
+    "mapType": 2,
+    "minPosition": {
+      "x": -10.0,
+      "y": 0.0,
+      "z": 0.0
+    },
+    "maxPosition": {
+      "x": 10.0,
+      "y": 0.0,
+      "z": 0.0
+    },
+    "mapDoorDataList": [
+      {
+        "doorType": 2,
+        "roleInitPos": {
+          "x": 4.577999,
+          "y": 0.0,
+          "z": 5.90099955
+        }
+      },
+      {
+        "doorType": 3,
+        "roleInitPos": {
+          "x": 12.425,
+          "y": 0.0,
+          "z": 0.0
+        }
+      }
+    ]
+  },
+  {
+    "mapName": "Home",
+    "mapType": 1,
+    "minPosition": {
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0
+    },
+    "maxPosition": {
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0
+    },
+    "mapDoorDataList": [
+      {
+        "doorType": 1,
+        "roleInitPos": {
+          "x": 0.0,
+          "y": 0.0,
+          "z": 4.72
+        }
+      }
+    ]
+  }
+]
