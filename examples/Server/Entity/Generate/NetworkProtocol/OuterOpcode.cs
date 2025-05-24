@@ -12,5 +12,8 @@ namespace Fantasy
 		 public const uint Rcv_CreateRole = 402663188;
 		 public const uint Send_SelectRole = 268445461;
 		 public const uint Rcv_SelectRole = 402663189;
+		 public const uint Send_StateSync = 268445462;
+		 public const uint Rcv_StateSync = 402663190;
+		 public const uint Msg_OtherPlayerStateSync = 134227729;
 	}
 }

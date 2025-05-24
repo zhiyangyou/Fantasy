@@ -8,6 +8,7 @@ package Fantasy.Network.Message;
 // 在message协议上方添加// Protocol+空格+协议名字
 // 例如:// Protocol ProtoBuf 或 // Protocol MemoryPack
 
+// -----------------登录, 选择角色-----------------
 
 message Send_RegisterAccount // IRequest ,Rcv_RegisterAccount
 {
@@ -84,3 +85,47 @@ message Rcv_SelectRole  // IResponse
 {
   RoleData role_data = 1;
 }
+
+
+
+// -----------------大厅状态同步协议-----------------
+
+message Send_StateSync // IRequest ,Rcv_StateSync
+{
+  int64 state_pack_id = 1; // 状态数据包id
+  StateSyncData role_sync_data = 2; // 同步数据
+}
+
+message Rcv_StateSync  // IResponse
+{
+  int64 state_pack_id = 1; // 状态数据包id
+  StateSyncData role_sync_data = 2; // 同步数据
+}
+
+
+// 状态同步的数据包
+message  StateSyncData
+{
+  int64 player_id = 1; // 玩家id
+  int32 map_type = 2; // 所在地图
+  CSVector3 position = 3; // 玩家位置
+  CSVector3 input_dir = 4; // 玩家输入方向
+  int32 state = 5 ; // 玩家状态: 待机,行走,奔跑
+  int32 role_id = 6 ; // 玩家角色职业类型: 鬼剑士, 神枪手
+  int32 player_map_status = 7; // 1: 处于地图中 2:离开地图 
+}
+
+
+// 其他玩家状态数据通知
+message Msg_OtherPlayerStateSync // IMessage
+{
+  StateSyncData role_data = 1;
+}
+
+message  CSVector3
+{
+  float x = 1;
+  float y = 2;
+  float z = 3;
+}
+

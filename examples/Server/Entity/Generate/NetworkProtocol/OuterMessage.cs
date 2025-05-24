@@ -293,4 +293,127 @@ namespace Fantasy
 		[ProtoMember(2)]
 		public uint ErrorCode { get; set; }
 	}
+	[ProtoContract]
+	public partial class Send_StateSync : AMessage, IRequest, IProto
+	{
+		public static Send_StateSync Create(Scene scene)
+		{
+			return scene.MessagePoolComponent.Rent<Send_StateSync>();
+		}
+		public override void Dispose()
+		{
+			state_pack_id = default;
+			role_sync_data = default;
+#if FANTASY_NET || FANTASY_UNITY
+			GetScene().MessagePoolComponent.Return<Send_StateSync>(this);
+#endif
+		}
+		[ProtoIgnore]
+		public Rcv_StateSync ResponseType { get; set; }
+		public uint OpCode() { return OuterOpcode.Send_StateSync; }
+		[ProtoMember(1)]
+		public long state_pack_id { get; set; }
+		[ProtoMember(2)]
+		public StateSyncData role_sync_data { get; set; }
+	}
+	[ProtoContract]
+	public partial class Rcv_StateSync : AMessage, IResponse, IProto
+	{
+		public static Rcv_StateSync Create(Scene scene)
+		{
+			return scene.MessagePoolComponent.Rent<Rcv_StateSync>();
+		}
+		public override void Dispose()
+		{
+			ErrorCode = default;
+			state_pack_id = default;
+			role_sync_data = default;
+#if FANTASY_NET || FANTASY_UNITY
+			GetScene().MessagePoolComponent.Return<Rcv_StateSync>(this);
+#endif
+		}
+		public uint OpCode() { return OuterOpcode.Rcv_StateSync; }
+		[ProtoMember(1)]
+		public long state_pack_id { get; set; }
+		[ProtoMember(2)]
+		public StateSyncData role_sync_data { get; set; }
+		[ProtoMember(3)]
+		public uint ErrorCode { get; set; }
+	}
+	[ProtoContract]
+	public partial class StateSyncData : AMessage, IProto
+	{
+		public static StateSyncData Create(Scene scene)
+		{
+			return scene.MessagePoolComponent.Rent<StateSyncData>();
+		}
+		public override void Dispose()
+		{
+			player_id = default;
+			map_type = default;
+			position = default;
+			input_dir = default;
+			state = default;
+			role_id = default;
+			player_map_status = default;
+#if FANTASY_NET || FANTASY_UNITY
+			GetScene().MessagePoolComponent.Return<StateSyncData>(this);
+#endif
+		}
+		[ProtoMember(1)]
+		public long player_id { get; set; }
+		[ProtoMember(2)]
+		public int map_type { get; set; }
+		[ProtoMember(3)]
+		public CSVector3 position { get; set; }
+		[ProtoMember(4)]
+		public CSVector3 input_dir { get; set; }
+		[ProtoMember(5)]
+		public int state { get; set; }
+		[ProtoMember(6)]
+		public int role_id { get; set; }
+		[ProtoMember(7)]
+		public int player_map_status { get; set; }
+	}
+	[ProtoContract]
+	public partial class Msg_OtherPlayerStateSync : AMessage, IMessage, IProto
+	{
+		public static Msg_OtherPlayerStateSync Create(Scene scene)
+		{
+			return scene.MessagePoolComponent.Rent<Msg_OtherPlayerStateSync>();
+		}
+		public override void Dispose()
+		{
+			role_data = default;
+#if FANTASY_NET || FANTASY_UNITY
+			GetScene().MessagePoolComponent.Return<Msg_OtherPlayerStateSync>(this);
+#endif
+		}
+		public uint OpCode() { return OuterOpcode.Msg_OtherPlayerStateSync; }
+		[ProtoMember(1)]
+		public StateSyncData role_data { get; set; }
+	}
+	[ProtoContract]
+	public partial class CSVector3 : AMessage, IProto
+	{
+		public static CSVector3 Create(Scene scene)
+		{
+			return scene.MessagePoolComponent.Rent<CSVector3>();
+		}
+		public override void Dispose()
+		{
+			x = default;
+			y = default;
+			z = default;
+#if FANTASY_NET || FANTASY_UNITY
+			GetScene().MessagePoolComponent.Return<CSVector3>(this);
+#endif
+		}
+		[ProtoMember(1)]
+		public float x { get; set; }
+		[ProtoMember(2)]
+		public float y { get; set; }
+		[ProtoMember(3)]
+		public float z { get; set; }
+	}
 }
