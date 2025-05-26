@@ -1,4 +1,5 @@
 ﻿using System.Collections.Concurrent;
+using System.Diagnostics;
 using System.Runtime.InteropServices.JavaScript;
 using Fantasy;
 using Fantasy.Entitas;
@@ -26,9 +27,35 @@ public class Component_HallPlayerManager : Entity {
         }
     }
 
+
+    public Model_HallPlayer GetHallPlayer(int mapTypeID, long account_id) {
+        var exist = _dicPlayer.TryGetValue(mapTypeID, out ConcurrentDictionary<long, Model_HallPlayer> dicPlayer);
+        if (!exist) {
+            return null;
+        }
+        return dicPlayer.TryGetValue(account_id, out Model_HallPlayer player) ? player : null;
+    }
+
     /// <summary>
     /// 验证大厅角色进入地图
     /// </summary>
+    public (uint errorCode, StateSyncData serverSyncData) DoPlayerMove(StateSyncData syncData) {
+        long account_id = syncData.player_id;
+        var hallPlayer = GetHallPlayer(syncData.map_type, account_id);
+        if (hallPlayer == null) {
+            return (ErrorCode.StateSync_PlayerNotExist, null);
+        }
+
+        hallPlayer.position.x += syncData.input_dir.x * GameConstConfig.FixedDeltaTime * GameConstConfig.HallPlayerMoveSpeed;
+        hallPlayer.position.y += syncData.input_dir.y * GameConstConfig.FixedDeltaTime * GameConstConfig.HallPlayerMoveSpeed;
+        hallPlayer.position.z += syncData.input_dir.z * GameConstConfig.FixedDeltaTime * GameConstConfig.HallPlayerMoveSpeed;
+
+
+        syncData.position = hallPlayer.position.ToCSVector3();
+        return (ErrorCode.Success, syncData);
+    }
+
+
     public uint VerifyHallRoleEnterMap(int gotoMapType) {
         var mapConfig = MapConfigConter.Instance.GetMapConfig((MapType)gotoMapType);
         if (mapConfig == null) {
@@ -57,19 +84,23 @@ public class Component_HallPlayerManager : Entity {
             throw new Exception($"不存在地图:{gotoMapType} 检查MapType枚举是否更新");
         }
 
+        Model_HallPlayer hallPlayer = null;
         if (!dicMapPlayers.ContainsKey(account_id)) {
-            Model_HallPlayer hallPlayer = Entity.Create<Model_HallPlayer>(this.Scene, true, false);
+            hallPlayer = Entity.Create<Model_HallPlayer>(this.Scene, true, false);
             hallPlayer.player_id = account_id;
             hallPlayer.session = session;
             hallPlayer.role = roleInfo;
-            hallPlayer.cur_map_type = gotoMapType;
             hallPlayer.position = MapConfigConter.Instance.GetMapConfig((MapType)gotoMapType).GetRoleInitPos((MapType)gotoMapType).ToVector3();
+            Log.Info($"进入房间{hallPlayer.position}");
             dicMapPlayers.TryAdd(account_id, hallPlayer);
-            return hallPlayer;
         }
         else {
-            return dicMapPlayers[account_id];
+            hallPlayer = dicMapPlayers[account_id];
         }
+        hallPlayer.cur_map_type = gotoMapType;
+        // 重新进入地图, 初始化角色位置
+        hallPlayer.position = MapConfigConter.Instance.GetMapConfig((MapType)gotoMapType).GetRoleInitPos((MapType)gotoMapType).ToVector3();
+        return hallPlayer;
     }
 
     /// <summary>
