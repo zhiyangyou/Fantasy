@@ -93,7 +93,6 @@ message Send_EnterMap // IRequest ,Rcv_EnterMap
   int64 player_id = 1; // account_id
   int32 cur_map = 2; // 当前所处地图: 如果是未登录,那么是 -1
   int32 map_type = 3; // 要进入的地图id
-  int32 door_type = 4; // 要去的门
 }
 
 // 响应: 进入地图
@@ -101,8 +100,7 @@ message Rcv_EnterMap  // IResponse
 {
   int64 player_id = 1; // account_id
   int32 map_type = 2; // 要进入的地图id
-  int32 door_type = 3; // 要去的门
-  CSVector3 role_init_pos = 4; // 初始化位置
+  CSVector3 role_init_pos = 3; // 初始化位置
 }
 
 

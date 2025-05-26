@@ -68,7 +68,7 @@ public class Component_HallPlayerManager : Entity {
             return hallPlayer;
         }
         else {
-            return null;
+            return dicMapPlayers[account_id];
         }
     }
 

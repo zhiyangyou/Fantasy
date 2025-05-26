@@ -305,7 +305,6 @@ namespace Fantasy
 			player_id = default;
 			cur_map = default;
 			map_type = default;
-			door_type = default;
 #if FANTASY_NET || FANTASY_UNITY
 			GetScene().MessagePoolComponent.Return<Send_EnterMap>(this);
 #endif
@@ -319,8 +318,6 @@ namespace Fantasy
 		public int cur_map { get; set; }
 		[ProtoMember(3)]
 		public int map_type { get; set; }
-		[ProtoMember(4)]
-		public int door_type { get; set; }
 	}
 	[ProtoContract]
 	public partial class Rcv_EnterMap : AMessage, IResponse, IProto
@@ -334,7 +331,6 @@ namespace Fantasy
 			ErrorCode = default;
 			player_id = default;
 			map_type = default;
-			door_type = default;
 			role_init_pos = default;
 #if FANTASY_NET || FANTASY_UNITY
 			GetScene().MessagePoolComponent.Return<Rcv_EnterMap>(this);
@@ -346,10 +342,8 @@ namespace Fantasy
 		[ProtoMember(2)]
 		public int map_type { get; set; }
 		[ProtoMember(3)]
-		public int door_type { get; set; }
-		[ProtoMember(4)]
 		public CSVector3 role_init_pos { get; set; }
-		[ProtoMember(5)]
+		[ProtoMember(4)]
 		public uint ErrorCode { get; set; }
 	}
 	[ProtoContract]
