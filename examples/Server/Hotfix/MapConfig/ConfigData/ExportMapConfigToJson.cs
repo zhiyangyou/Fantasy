@@ -11,11 +11,11 @@ using UnityEngine;
 public class ExportMapConfigToJson {
     static string ClientConfigDataDir {
         get {
-            var clientDir = Path.Combine(Application.dataPath, "Editor/MapConfig/");
+            var clientDir = Path.Combine(Application.dataPath, "GameData/Hall/MapConfig");
             return clientDir;
         }
     }
-    
+
     static string ClientSourceCodeDir {
         get {
             var clientDir = Path.Combine(Application.dataPath, "GameScripts/MonoScript/Map/MapTools");
@@ -55,7 +55,7 @@ public class ExportMapConfigToJson {
             }
         }
         string json = JsonConvert.SerializeObject(mapConfigs, Formatting.Indented);
-        Debug.Log(json);
+        // Debug.Log(json);
         var clientDir = ClientConfigDataDir;
 
         if (!Directory.Exists(clientDir)) {
@@ -63,15 +63,16 @@ public class ExportMapConfigToJson {
         }
         var saveClientPath = Path.Combine(clientDir, "MapConfig.json");
         File.WriteAllText(saveClientPath, json);
-        Debug.Log("MapConfig Generate Success Path:" + saveClientPath);
+        // Debug.Log("MapConfig Generate Success Path:" + saveClientPath);
         AssetDatabase.Refresh();
         CopyCodeAndConfigToServer();
+        Debug.Log("生成完成");
     }
 
     private static void CopyCodeAndConfigToServer() {
-
         CopyDir(ClientConfigDataDir);
         CopyDir(ClientSourceCodeDir);
+
         void CopyDir(string sourceDir) {
             var dirInfo = new DirectoryInfo(sourceDir);
             foreach (var fileInfo in dirInfo.GetFiles()) {
@@ -80,11 +81,10 @@ public class ExportMapConfigToJson {
                    ) {
                     var copyFileFullPath = Path.Combine(ServerConfigDir, fileInfo.Name);
                     File.Copy(fileInfo.FullName, copyFileFullPath, true);
-                    Debug.LogError($"拷贝文件:{copyFileFullPath}");
+                    Debug.Log($"拷贝文件:{copyFileFullPath}");
                 }
             }
         }
-
     }
 
     public static CSVector3 ToCSVector3(Vector3 ve3) {

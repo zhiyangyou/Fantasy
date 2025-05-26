@@ -6,6 +6,9 @@ using System.Linq;
 using System.Security.AccessControl;
 using System.Text;
 using System.Threading.Tasks;
+#if UNITY_2017_2_OR_NEWER
+using ZM.ZMAsset;
+#endif
 
 namespace Hotfix {
     public class MapConfigConter {
@@ -35,9 +38,10 @@ namespace Hotfix {
             }
         }
 
-        public string LoadJsonStr() {
+        private string LoadJsonStr() {
 #if UNITY_2017_2_OR_NEWER
-            return null;
+            var jsonAsset = ZMAsset.LoadTextAsset($"{AssetsPathConfig.Hall}MapConfig/MapConfig.json");
+            return jsonAsset.text;
 #else
             var path = "MapConfig/ConfigData/MapConfig.json";
             return File.ReadAllText(path);
