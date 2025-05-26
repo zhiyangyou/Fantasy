@@ -294,6 +294,65 @@ namespace Fantasy
 		public uint ErrorCode { get; set; }
 	}
 	[ProtoContract]
+	public partial class Send_EnterMap : AMessage, IRequest, IProto
+	{
+		public static Send_EnterMap Create(Scene scene)
+		{
+			return scene.MessagePoolComponent.Rent<Send_EnterMap>();
+		}
+		public override void Dispose()
+		{
+			player_id = default;
+			cur_map = default;
+			map_type = default;
+			door_type = default;
+#if FANTASY_NET || FANTASY_UNITY
+			GetScene().MessagePoolComponent.Return<Send_EnterMap>(this);
+#endif
+		}
+		[ProtoIgnore]
+		public Rcv_EnterMap ResponseType { get; set; }
+		public uint OpCode() { return OuterOpcode.Send_EnterMap; }
+		[ProtoMember(1)]
+		public long player_id { get; set; }
+		[ProtoMember(2)]
+		public int cur_map { get; set; }
+		[ProtoMember(3)]
+		public int map_type { get; set; }
+		[ProtoMember(4)]
+		public int door_type { get; set; }
+	}
+	[ProtoContract]
+	public partial class Rcv_EnterMap : AMessage, IResponse, IProto
+	{
+		public static Rcv_EnterMap Create(Scene scene)
+		{
+			return scene.MessagePoolComponent.Rent<Rcv_EnterMap>();
+		}
+		public override void Dispose()
+		{
+			ErrorCode = default;
+			player_id = default;
+			map_type = default;
+			door_type = default;
+			role_init_pos = default;
+#if FANTASY_NET || FANTASY_UNITY
+			GetScene().MessagePoolComponent.Return<Rcv_EnterMap>(this);
+#endif
+		}
+		public uint OpCode() { return OuterOpcode.Rcv_EnterMap; }
+		[ProtoMember(1)]
+		public long player_id { get; set; }
+		[ProtoMember(2)]
+		public int map_type { get; set; }
+		[ProtoMember(3)]
+		public int door_type { get; set; }
+		[ProtoMember(4)]
+		public CSVector3 role_init_pos { get; set; }
+		[ProtoMember(5)]
+		public uint ErrorCode { get; set; }
+	}
+	[ProtoContract]
 	public partial class Send_StateSync : AMessage, IRequest, IProto
 	{
 		public static Send_StateSync Create(Scene scene)

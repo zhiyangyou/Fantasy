@@ -1,5 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics;
 using Fantasy;
 using Fantasy.Async;
 using Fantasy.Entitas;
@@ -15,10 +16,37 @@ public class Component_RoleManager : Entity {
     /// </summary>
     private ConcurrentDictionary<string, Model_Role> _dicRoles = new();
 
+
+    /// <summary>
+    /// 记录玩家当前选择的角色
+    /// key: account_id
+    /// value: 选择的角色
+    /// </summary>
+    private ConcurrentDictionary<long, Model_Role> _dicAccountSelectRole = new();
+
     #endregion
 
 
     #region public
+
+    public void UpdateSelectRole(long account_id, Model_Role modelRole) {
+        if (modelRole == null) {
+            Log.Error("UpdateSelectRole 输入参数modelRole 是null");
+            return;
+        }
+        _dicAccountSelectRole.AddOrUpdate(account_id, (_) => modelRole, (_, __) => modelRole);
+    }
+
+
+    /// <summary>
+    /// 获取account_id当前选择的角色, 结果可空
+    /// </summary>
+    /// <param name="account_id"></param>
+    /// <returns></returns>
+    public Model_Role? GetCurSelectRole(long account_id) {
+        _dicAccountSelectRole.TryGetValue(account_id, out var modelRole);
+        return modelRole;
+    }
 
     public async FTask<bool> RoleExists(long role_uid) {
         if (role_uid <= 0) {
@@ -93,6 +121,18 @@ public class Component_RoleManager : Entity {
             await db.Save(modelRole);
             return (0, modelRole);
         }
+    }
+
+
+    /// <summary>
+    /// 获取用户当前选择的Role
+    /// </summary>
+    /// <param name="account_id"></param>
+    /// <returns></returns>
+    public async FTask<List<RoleData>> GetUserSelectRole(long account_id) {
+        var db = this.Scene.World.DataBase;
+        var models = await db.Query<Model_Role>(data => data.account_id == account_id);
+        return models.Select(role => role.ToRoleData()).ToList();
     }
 
     #endregion

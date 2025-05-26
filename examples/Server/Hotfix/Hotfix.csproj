@@ -16,7 +16,6 @@
       <Folder Include="Gate\" />
       <Folder Include="Handlers\" />
       <Folder Include="MapConfig\ConfigData\" />
-      <Folder Include="Share\" />
       <Folder Include="Tools\" />
     </ItemGroup>
 

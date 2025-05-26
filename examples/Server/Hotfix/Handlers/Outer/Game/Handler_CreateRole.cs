@@ -15,6 +15,7 @@ public class Handler_CreateRole : MessageRPC<Send_CreateRole, Rcv_CreateRole> {
         if (response.ErrorCode == 0) {
             var modelRole = tp.role;
             response.role_data = modelRole.ToRoleData();
+            roleManager.UpdateSelectRole(request.account_id, modelRole);
         }
         await FTask.CompletedTask;
     }

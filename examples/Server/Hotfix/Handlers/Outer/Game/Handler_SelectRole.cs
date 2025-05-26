@@ -16,6 +16,7 @@ public class Handler_SelectRole : MessageRPC<Send_SelectRole, Rcv_SelectRole> {
         else {
             response.ErrorCode = 0;
             response.role_data = modelRole.ToRoleData();
+            roleComponent.UpdateSelectRole(request.account_id, modelRole);
         }
         await FTask.CompletedTask;
     }
