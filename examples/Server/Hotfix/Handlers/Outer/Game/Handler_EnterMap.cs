@@ -64,22 +64,23 @@ public class Handler_EnterMap : MessageRPC<Send_EnterMap, Rcv_EnterMap> {
         long curAccountID,
         int curRoleID,
         Model_HallPlayer curPlayer) {
-        
         // TODO 不应该还有一个 , 将当前客户端同步给当前地图的其他玩家的操作吗? 2025年5月26日18:49:05
-        
+
         //   将其他玩家的信息推送给当前客户端
         {
             var curList = hallPlayerManager.GetHallPlayersInMap(curMapTypeID, curAccountID);
-            Msg_OtherPlayerStateSync msgIn = new Msg_OtherPlayerStateSync();
-            msgIn.role_data = new StateSyncData() { };
-            foreach (var player in curList) {
-                if (player != null) {
-                    msgIn.role_data.role_id = player.role.role_id;
-                    msgIn.role_data.player_map_status = (int)PlayerMapStatus.InMap;
-                    msgIn.role_data.player_id = player.player_id;
-                    msgIn.role_data.position = player.position.ToCSVector3();
-                    msgIn.role_data.input_dir = new CSVector3();  // TODO
-                    curPlayer.session.Send(msgIn);
+            if (curList != null) {
+                Msg_OtherPlayerStateSync msgIn = new Msg_OtherPlayerStateSync();
+                msgIn.role_data = new StateSyncData() { };
+                foreach (var player in curList) {
+                    if (player != null) {
+                        msgIn.role_data.role_id = player.role.role_id;
+                        msgIn.role_data.player_map_status = (int)PlayerMapStatus.InMap;
+                        msgIn.role_data.player_id = player.player_id;
+                        msgIn.role_data.position = player.position.ToCSVector3();
+                        msgIn.role_data.input_dir = new CSVector3(); // TODO
+                        curPlayer.session.Send(msgIn);
+                    }
                 }
             }
         }
@@ -87,18 +88,20 @@ public class Handler_EnterMap : MessageRPC<Send_EnterMap, Rcv_EnterMap> {
         // 广播上一张地图上的所有玩家, 当前玩家离开了
         {
             var lastList = hallPlayerManager.GetHallPlayersInMap(lastMapTypeID, curAccountID);
-            Msg_OtherPlayerStateSync msgOut = new Msg_OtherPlayerStateSync();
-            msgOut.role_data = new StateSyncData() {
-                map_type = lastMapTypeID,
-                player_id = curAccountID,
-                player_map_status = (int)PlayerMapStatus.OutMap,
-                role_id = curRoleID,
-            };
+            if (lastList != null) {
+                Msg_OtherPlayerStateSync msgOut = new Msg_OtherPlayerStateSync();
+                msgOut.role_data = new StateSyncData() {
+                    map_type = lastMapTypeID,
+                    player_id = curAccountID,
+                    player_map_status = (int)PlayerMapStatus.OutMap,
+                    role_id = curRoleID,
+                };
 
 
-            foreach (var player in lastList) {
-                if (player != null) {
-                    player.session.Send(msgOut);
+                foreach (var player in lastList) {
+                    if (player != null) {
+                        player.session.Send(msgOut);
+                    }
                 }
             }
         }

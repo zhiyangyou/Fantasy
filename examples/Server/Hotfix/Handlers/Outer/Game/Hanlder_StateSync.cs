@@ -44,7 +44,7 @@ class Hanlder_StateSync : MessageRPC<Send_StateSync, Rcv_StateSync> {
         message.role_data = syncData;
         message.role_data.player_map_status = (int)PlayerMapStatus.InMap;
         var listPlayerInMap = hallPlayerManager.GetHallPlayersInMap(mapType, account_id);
-        if (listPlayerInMap != null && listPlayerInMap.Count > 0) {
+        if (listPlayerInMap is { Count: > 0 }) {
             foreach (var playerInMap in listPlayerInMap) {
                 if (playerInMap == null) {
                     continue;
