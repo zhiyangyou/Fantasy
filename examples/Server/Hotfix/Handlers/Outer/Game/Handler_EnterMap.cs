@@ -4,7 +4,7 @@ using Fantasy.Network;
 using Fantasy.Network.Interface;
 using Hotfix.Component;
 using Hotfix.Model.Hall;
-using Hotfix.ShareToClient;
+using ServerShareToClient;
 
 namespace Hotfix.Handlers.Outer.Game;
 
@@ -29,7 +29,7 @@ public class Handler_EnterMap : MessageRPC<Send_EnterMap, Rcv_EnterMap> {
         if (curSelectRole == null) {
             response.ErrorCode = ErrorCode.EnterMap_RoleNotFound;
             return;
-        } 
+        }
 
         // 上一张地图中,移除该玩家
         hallPlayerComponent.RemoveHallPlayerFromMap(account_id, request.cur_map);

@@ -1,11 +1,9 @@
 ﻿using System.Collections.Concurrent;
-using System.Diagnostics;
-using System.Runtime.InteropServices.JavaScript;
 using Fantasy;
 using Fantasy.Entitas;
 using Fantasy.Network;
 using Hotfix.Model.Hall;
-using Hotfix.ShareToClient;
+using ServerShareToClient;
 
 namespace Hotfix.Component;
 
@@ -46,9 +44,9 @@ public class Component_HallPlayerManager : Entity {
             return (ErrorCode.StateSync_PlayerNotExist, null);
         }
 
-        hallPlayer.position.x += syncData.input_dir.x * GameConstConfig.FixedDeltaTime * GameConstConfig.HallPlayerMoveSpeed;
-        hallPlayer.position.y += syncData.input_dir.y * GameConstConfig.FixedDeltaTime * GameConstConfig.HallPlayerMoveSpeed;
-        hallPlayer.position.z += syncData.input_dir.z * GameConstConfig.FixedDeltaTime * GameConstConfig.HallPlayerMoveSpeed;
+        hallPlayer.position.x += syncData.input_dir.x * GameConstConfig.FixedDeltaTime * GameConstConfig.HallPlayerMoveSpeed * GameConstConfig.MaxSyncStateCount;
+        hallPlayer.position.y += syncData.input_dir.y * GameConstConfig.FixedDeltaTime * GameConstConfig.HallPlayerMoveSpeed * GameConstConfig.MaxSyncStateCount;
+        hallPlayer.position.z += syncData.input_dir.z * GameConstConfig.FixedDeltaTime * GameConstConfig.HallPlayerMoveSpeed * GameConstConfig.MaxSyncStateCount;
 
 
         syncData.position = hallPlayer.position.ToCSVector3();

@@ -4,7 +4,7 @@ using Fantasy.Async;
 using Fantasy.Network;
 using Fantasy.Network.Interface;
 using Hotfix.Component;
-using Hotfix.ShareToClient;
+using ServerShareToClient;
 
 class Hanlder_StateSync : MessageRPC<Send_StateSync, Rcv_StateSync> {
     protected override async FTask Run(Session session, Send_StateSync request, Rcv_StateSync response, Action reply) {
