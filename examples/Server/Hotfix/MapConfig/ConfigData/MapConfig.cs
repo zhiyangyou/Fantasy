@@ -28,11 +28,11 @@ public class MapConfig
     /// </summary>
     /// <param name="doorType"></param>
     /// <returns></returns>
-    public CSVector3 GetRoleInitPos(DoorType doorType)
+    public CSVector3 GetRoleInitPos(MapType gotoMapType)
     {
         foreach (var item in mapDoorDataList)
         {
-            if (item.doorType== doorType)
+            if ((int)item.doorType== (int)gotoMapType)
             {
                 return item.roleInitPos;
             }

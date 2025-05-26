@@ -18,7 +18,7 @@ public class Handler_EnterMap : MessageRPC<Send_EnterMap, Rcv_EnterMap> {
             return;
         }
         var hallPlayerComponent = session.Scene.GetComponent<Component_HallPlayerManager>();
-        var configCheckRet = hallPlayerComponent.VerifyHallRoleEnterMap(request.map_type, request.door_type);
+        var configCheckRet = hallPlayerComponent.VerifyHallRoleEnterMap(request.map_type);
         if (configCheckRet != ErrorCode.Success) {
             response.ErrorCode = configCheckRet;
             return;
@@ -34,7 +34,7 @@ public class Handler_EnterMap : MessageRPC<Send_EnterMap, Rcv_EnterMap> {
         hallPlayerComponent.RemoveHallPlayerFromMap(account_id, request.cur_map);
 
         // 下一张地图, 添加该玩家 
-        Model_HallPlayer hallPlayer = hallPlayerComponent.AddHallPlayerToMap(account_id, session, request.map_type, request.door_type, modelRole);
+        Model_HallPlayer hallPlayer = hallPlayerComponent.AddHallPlayerToMap(account_id, session, request.map_type, modelRole);
 
         if (hallPlayer == null) {
             response.ErrorCode = ErrorCode.EnterMap_Failed;
