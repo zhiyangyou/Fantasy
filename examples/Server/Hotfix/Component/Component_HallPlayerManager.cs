@@ -26,6 +26,31 @@ public class Component_HallPlayerManager : Entity {
     }
 
 
+    /// <summary>
+    /// 获取处于特定地图上的所有玩家
+    /// </summary>
+    /// <param name="mapTypeID"></param>
+    /// <param name="filterID"></param>
+    /// <returns></returns>
+    public List<Model_HallPlayer> GetHallPlayersInMap(int mapTypeID, long filterID) {
+        if (mapTypeID == (int)MapType.Home || mapTypeID == (int)MapType.None) {
+            return null;
+        }
+        ConcurrentDictionary<long, Model_HallPlayer> dicPlayer = null;
+        _dicPlayer.TryGetValue(mapTypeID, out dicPlayer);
+        if (dicPlayer == null) {
+            return null;
+        }
+        var retList = new List<Model_HallPlayer>();
+
+        foreach (var player in dicPlayer.Values) {
+            if (player.player_id != filterID) {
+                retList.Add(player);
+            }
+        }
+        return retList;
+    }
+
     public Model_HallPlayer GetHallPlayer(int mapTypeID, long account_id) {
         var exist = _dicPlayer.TryGetValue(mapTypeID, out ConcurrentDictionary<long, Model_HallPlayer> dicPlayer);
         if (!exist) {
