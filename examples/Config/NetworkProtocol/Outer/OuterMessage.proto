@@ -128,7 +128,7 @@ message  StateSyncData
   CSVector3 input_dir = 4; // 玩家输入方向
   int32 state = 5 ; // 玩家状态: 待机,行走,奔跑
   int32 role_id = 6 ; // 玩家角色职业类型: 鬼剑士, 神枪手
-  int32 player_map_status = 7; // 1: 处于地图中 2:离开地图 
+  int32 player_map_status = 7; // 1: 处于地图中 2:离开地图   对应枚举:PlayerMapStatus
 }
 
 

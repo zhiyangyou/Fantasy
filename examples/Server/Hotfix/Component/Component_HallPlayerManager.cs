@@ -89,7 +89,6 @@ public class Component_HallPlayerManager : Entity {
             hallPlayer.session = session;
             hallPlayer.role = roleInfo;
             hallPlayer.position = MapConfigConter.Instance.GetMapConfig((MapType)gotoMapType).GetRoleInitPos((MapType)gotoMapType).ToVector3();
-            Log.Info($"进入房间{hallPlayer.position}");
             dicMapPlayers.TryAdd(account_id, hallPlayer);
         }
         else {
