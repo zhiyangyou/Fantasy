@@ -152,15 +152,16 @@ public class Component_HallPlayerManager : Entity {
             if (dicPlayersInMap.ContainsKey(account_id)) {
                 RemoveHallPlayerFromMap(account_id, mapTypeID);
                 var otherPlayers = GetHallPlayersInMap(mapTypeID, account_id);
-
-                Msg_OtherPlayerStateSync msg = new Msg_OtherPlayerStateSync();
-                msg.role_data = new StateSyncData() {
-                    player_id = account_id,
-                    map_type = mapTypeID,
-                    player_map_status = (int)PlayerMapStatus.OutMap,
-                };
-                foreach (var otherPlayer in otherPlayers) {
-                    otherPlayer.session.Send(msg);
+                if (otherPlayers != null) {
+                    Msg_OtherPlayerStateSync msg = new Msg_OtherPlayerStateSync();
+                    msg.role_data = new StateSyncData() {
+                        player_id = account_id,
+                        map_type = mapTypeID,
+                        player_map_status = (int)PlayerMapStatus.OutMap,
+                    };
+                    foreach (var otherPlayer in otherPlayers) {
+                        otherPlayer.session.Send(msg);
+                    }
                 }
                 break;
             }
