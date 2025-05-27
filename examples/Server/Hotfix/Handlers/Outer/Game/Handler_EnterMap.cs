@@ -66,6 +66,7 @@ public class Handler_EnterMap : MessageRPC<Send_EnterMap, Rcv_EnterMap> {
         int curRoleID,
         Model_HallPlayer curPlayer) {
         // TODO 不应该还有一个 , 将当前客户端同步给当前地图的其他玩家的操作吗? 2025年5月26日18:49:05
+        // 也可以不做, 因为下一次这个玩家移动的时候, 就会发生一次同步. 
 
         Log.Info($"玩家:{curAccountID} 离开了地图{lastMapTypeID} 进入了地图{curMapTypeID}");
         
