@@ -347,6 +347,124 @@ namespace Fantasy
 		public uint ErrorCode { get; set; }
 	}
 	[ProtoContract]
+	public partial class Send_CreateTeam : AMessage, IRequest, IProto
+	{
+		public static Send_CreateTeam Create(Scene scene)
+		{
+			return scene.MessagePoolComponent.Rent<Send_CreateTeam>();
+		}
+		public override void Dispose()
+		{
+			account_id = default;
+			map_type = default;
+#if FANTASY_NET || FANTASY_UNITY
+			GetScene().MessagePoolComponent.Return<Send_CreateTeam>(this);
+#endif
+		}
+		[ProtoIgnore]
+		public Rcv_CreateTeam ResponseType { get; set; }
+		public uint OpCode() { return OuterOpcode.Send_CreateTeam; }
+		[ProtoMember(1)]
+		public long account_id { get; set; }
+		[ProtoMember(2)]
+		public int map_type { get; set; }
+	}
+	[ProtoContract]
+	public partial class Rcv_CreateTeam : AMessage, IResponse, IProto
+	{
+		public static Rcv_CreateTeam Create(Scene scene)
+		{
+			return scene.MessagePoolComponent.Rent<Rcv_CreateTeam>();
+		}
+		public override void Dispose()
+		{
+			ErrorCode = default;
+			team_id = default;
+			role_data = default;
+#if FANTASY_NET || FANTASY_UNITY
+			GetScene().MessagePoolComponent.Return<Rcv_CreateTeam>(this);
+#endif
+		}
+		public uint OpCode() { return OuterOpcode.Rcv_CreateTeam; }
+		[ProtoMember(1)]
+		public int team_id { get; set; }
+		[ProtoMember(2)]
+		public RoleData role_data { get; set; }
+		[ProtoMember(3)]
+		public uint ErrorCode { get; set; }
+	}
+	[ProtoContract]
+	public partial class Send_JoinTeam : AMessage, IRequest, IProto
+	{
+		public static Send_JoinTeam Create(Scene scene)
+		{
+			return scene.MessagePoolComponent.Rent<Send_JoinTeam>();
+		}
+		public override void Dispose()
+		{
+			account_id = default;
+			map_type = default;
+			team_id = default;
+#if FANTASY_NET || FANTASY_UNITY
+			GetScene().MessagePoolComponent.Return<Send_JoinTeam>(this);
+#endif
+		}
+		[ProtoIgnore]
+		public Rcv_JoinTeam ResponseType { get; set; }
+		public uint OpCode() { return OuterOpcode.Send_JoinTeam; }
+		[ProtoMember(1)]
+		public long account_id { get; set; }
+		[ProtoMember(2)]
+		public int map_type { get; set; }
+		[ProtoMember(3)]
+		public int team_id { get; set; }
+	}
+	[ProtoContract]
+	public partial class Rcv_JoinTeam : AMessage, IResponse, IProto
+	{
+		public static Rcv_JoinTeam Create(Scene scene)
+		{
+			return scene.MessagePoolComponent.Rent<Rcv_JoinTeam>();
+		}
+		public override void Dispose()
+		{
+			ErrorCode = default;
+			team_id = default;
+			team_role_list.Clear();
+#if FANTASY_NET || FANTASY_UNITY
+			GetScene().MessagePoolComponent.Return<Rcv_JoinTeam>(this);
+#endif
+		}
+		public uint OpCode() { return OuterOpcode.Rcv_JoinTeam; }
+		[ProtoMember(1)]
+		public int team_id { get; set; }
+		[ProtoMember(2)]
+		public List<RoleData> team_role_list = new List<RoleData>();
+		[ProtoMember(3)]
+		public uint ErrorCode { get; set; }
+	}
+	[ProtoContract]
+	public partial class Msg_TeamStateChanged : AMessage, IMessage, IProto
+	{
+		public static Msg_TeamStateChanged Create(Scene scene)
+		{
+			return scene.MessagePoolComponent.Rent<Msg_TeamStateChanged>();
+		}
+		public override void Dispose()
+		{
+			team_state = default;
+			role_data = default;
+#if FANTASY_NET || FANTASY_UNITY
+			GetScene().MessagePoolComponent.Return<Msg_TeamStateChanged>(this);
+#endif
+		}
+		public uint OpCode() { return OuterOpcode.Msg_TeamStateChanged; }
+		[ProtoMember(1)]
+		public int team_state { get; set; }
+		[ProtoMember(2)]
+		public RoleData role_data { get; set; }
+	}
+	[ProtoContract]
 	public partial class Send_StateSync : AMessage, IRequest, IProto
 	{
 		public static Send_StateSync Create(Scene scene)

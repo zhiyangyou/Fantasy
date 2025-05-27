@@ -103,6 +103,43 @@ message Rcv_EnterMap  // IResponse
   CSVector3 role_init_pos = 3; // 初始化位置
 }
 
+// -----------------队伍相关----------------
+
+// 请求:创建队伍
+message Send_CreateTeam // IRequest ,Rcv_CreateTeam
+{
+  int64 account_id = 1; // 创建队伍的玩家
+  int32 map_type = 2; //是打哪个副本的队伍
+}
+// 响应:创建队伍
+message Rcv_CreateTeam  // IResponse
+{
+  int32 team_id = 1; // 队伍id
+  RoleData role_data = 2; // 创建队伍的角色
+}
+
+// 请求:加入队伍
+message Send_JoinTeam // IRequest ,Rcv_JoinTeam
+{
+  int64 account_id = 1;// 请求加入队伍的用户
+  int32 map_type = 2 ; // 哪个副本
+  int32 team_id = 3;// 请求加入哪个队伍
+}
+
+// 响应:加入队伍
+message Rcv_JoinTeam // IResponse
+{
+  int32 team_id = 1;// 请求加入哪个队伍
+  repeated RoleData team_role_list = 2;// 队伍成员
+}
+
+message Msg_TeamStateChanged // IMessage 
+{
+  int32 team_state = 1; // 1.玩家加入 2.玩家离开 3.队伍解散
+  RoleData role_data = 2;// 哪个玩家导致的状态变更
+}
+
+
 
 // -----------------大厅状态同步协议-----------------
 
@@ -117,6 +154,10 @@ message Rcv_StateSync  // IResponse
   int64 state_pack_id = 1; // 状态数据包id
   StateSyncData role_sync_data = 2; // 同步数据
 }
+
+
+
+
 
 
 // 状态同步的数据包

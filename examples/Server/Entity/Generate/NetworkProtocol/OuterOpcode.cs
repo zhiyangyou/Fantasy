@@ -14,8 +14,13 @@ namespace Fantasy
 		 public const uint Rcv_SelectRole = 402663189;
 		 public const uint Send_EnterMap = 268445462;
 		 public const uint Rcv_EnterMap = 402663190;
-		 public const uint Send_StateSync = 268445463;
-		 public const uint Rcv_StateSync = 402663191;
-		 public const uint Msg_OtherPlayerStateSync = 134227729;
+		 public const uint Send_CreateTeam = 268445463;
+		 public const uint Rcv_CreateTeam = 402663191;
+		 public const uint Send_JoinTeam = 268445464;
+		 public const uint Rcv_JoinTeam = 402663192;
+		 public const uint Msg_TeamStateChanged = 134227729;
+		 public const uint Send_StateSync = 268445465;
+		 public const uint Rcv_StateSync = 402663193;
+		 public const uint Msg_OtherPlayerStateSync = 134227730;
 	}
 }
