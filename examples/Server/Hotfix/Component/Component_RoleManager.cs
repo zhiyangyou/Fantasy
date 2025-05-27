@@ -136,4 +136,6 @@ public class Component_RoleManager : Entity {
     }
 
     #endregion
+
+    public void Process_PlayerDisconnect(long accountId) { }
 }

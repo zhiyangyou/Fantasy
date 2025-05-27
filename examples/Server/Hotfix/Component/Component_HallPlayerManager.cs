@@ -139,4 +139,31 @@ public class Component_HallPlayerManager : Entity {
         }
         return false;
     }
+
+
+    /// <summary>
+    /// 处理玩家链接断开
+    /// </summary>
+    /// <param name="account_id"></param>
+    public void Process_PlayerDisconnect(long account_id) {
+        foreach (var kv in _dicPlayer) {
+            int mapTypeID = kv.Key;
+            var dicPlayersInMap = kv.Value;
+            if (dicPlayersInMap.ContainsKey(account_id)) {
+                RemoveHallPlayerFromMap(account_id, mapTypeID);
+                var otherPlayers = GetHallPlayersInMap(mapTypeID, account_id);
+
+                Msg_OtherPlayerStateSync msg = new Msg_OtherPlayerStateSync();
+                msg.role_data = new StateSyncData() {
+                    player_id = account_id,
+                    map_type = mapTypeID,
+                    player_map_status = (int)PlayerMapStatus.OutMap,
+                };
+                foreach (var otherPlayer in otherPlayers) {
+                    otherPlayer.session.Send(msg);
+                }
+                break;
+            }
+        }
+    }
 }

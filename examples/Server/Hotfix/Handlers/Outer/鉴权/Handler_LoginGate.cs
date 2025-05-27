@@ -24,6 +24,8 @@ public class Handler_LoginGate : MessageRPC<Send_LoginGate, Rcv_LoginGate> {
                 response.level = modelAccount.level;
                 response.gold = modelAccount.golds;
                 response.role_datas = roleDatas;
+                Component_SessionDispose componentSessionDispose = session.AddComponent<Component_SessionDispose>();
+                componentSessionDispose.account_id = request.account_id;
             }
             else {
                 response.ErrorCode = 1002;
