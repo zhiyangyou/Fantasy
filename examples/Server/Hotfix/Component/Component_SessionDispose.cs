@@ -11,11 +11,26 @@ public class Component_SessionDispose : Entity {
     public long account_id;
 
     public override void Dispose() {
-        var roleManager = this.Scene.GetComponent<Component_RoleManager>();
-        var hallPlayerManager = this.Scene.GetComponent<Component_HallPlayerManager>();
-        Log.Info($"TODO 用户{account_id} 下线了 {roleManager != null} {hallPlayerManager != null}");
-        hallPlayerManager.Process_PlayerDisconnect(account_id);
-        roleManager.Process_PlayerDisconnect(account_id);
+        Process_HallPlayerManager();
+        Process_RoleManager();
+        Process_TeamManager();
         base.Dispose();
+    }
+
+
+
+    private void Process_TeamManager() {
+        var roleManager = this.Scene.GetComponent<Component_TeamManager>();
+        roleManager.Process_PlayerDisconnect(account_id);
+    }
+    
+    private void Process_RoleManager() {
+        var roleManager = this.Scene.GetComponent<Component_RoleManager>();
+        roleManager.Process_PlayerDisconnect(account_id);
+    }
+
+    private void Process_HallPlayerManager() {
+        var hallPlayerManager = this.Scene.GetComponent<Component_HallPlayerManager>();
+        hallPlayerManager.Process_PlayerDisconnect(account_id);
     }
 }

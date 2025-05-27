@@ -137,5 +137,10 @@ public class Component_RoleManager : Entity {
 
     #endregion
 
-    public void Process_PlayerDisconnect(long accountId) { }
+    public void Process_PlayerDisconnect(long accountId) {
+        _dicAccountSelectRole.TryRemove(accountId, out var selectModelRole);
+        if (selectModelRole != null) {
+            _dicRoles.TryRemove(selectModelRole.role_name, out _);
+        }
+    }
 }

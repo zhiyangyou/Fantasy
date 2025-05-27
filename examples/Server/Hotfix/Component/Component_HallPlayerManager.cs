@@ -51,6 +51,17 @@ public class Component_HallPlayerManager : Entity {
         return retList;
     }
 
+    public Model_HallPlayer? FindHallPlayer(long account_id) {
+        foreach (var playersInMap in _dicPlayer.Values) {
+            foreach (var player in playersInMap.Values) {
+                if (player.player_id == account_id) {
+                    return player;
+                }
+            }
+        }
+        return null;
+    }
+
     public Model_HallPlayer GetHallPlayer(int mapTypeID, long account_id) {
         var exist = _dicPlayer.TryGetValue(mapTypeID, out ConcurrentDictionary<long, Model_HallPlayer> dicPlayer);
         if (!exist) {

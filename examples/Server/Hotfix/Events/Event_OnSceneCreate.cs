@@ -24,14 +24,14 @@ public class Event_OnSceneCreate : IAsyncEvent {
                 scene.AddComponent<Component_RSAEncrypt>();
                 scene.AddComponent<Component_SceneConfig>();
                 scene.AddComponent<Component_RoleManager>();
-                
-            } 
+            }
             if (scene.SceneType == (int)SceneType.Gate) {
                 scene.AddComponent<Component_RSAEncrypt>();
                 scene.AddComponent<Component_SceneConfig>();
                 scene.AddComponent<Component_RoleManager>();
                 scene.AddComponent<Component_HallPlayerManager>();
-            } 
+                scene.AddComponent<Component_TeamManager>();
+            }
         }
         return FTask.Create();
     }

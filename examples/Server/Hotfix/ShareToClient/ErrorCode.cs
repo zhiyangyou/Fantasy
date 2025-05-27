@@ -12,5 +12,9 @@
         public const uint EnterMap_Failed = 1305; // 进入地图接口, 门id错误
 
         public const uint StateSync_PlayerNotExist = 1401; // 地图状态同步, 后端数据找不到玩家
+
+
+        public const uint CreateTeam_TeamExist = 1501; //  队伍已经创建了
+        public const uint CreateTeam_PlayerUnvalid = 1501; //  队伍已经创建了
     }
 }
