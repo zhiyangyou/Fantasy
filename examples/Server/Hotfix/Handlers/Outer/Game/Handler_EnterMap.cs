@@ -1,4 +1,5 @@
-﻿using Fantasy;
+﻿using System.Diagnostics;
+using Fantasy;
 using Fantasy.Async;
 using Fantasy.Network;
 using Fantasy.Network.Interface;
@@ -53,7 +54,7 @@ public class Handler_EnterMap : MessageRPC<Send_EnterMap, Rcv_EnterMap> {
             request.player_id,
             curSelectRole.role_id,
             hallPlayer);
-
+   
         await FTask.CompletedTask;
     }
 
@@ -66,6 +67,8 @@ public class Handler_EnterMap : MessageRPC<Send_EnterMap, Rcv_EnterMap> {
         Model_HallPlayer curPlayer) {
         // TODO 不应该还有一个 , 将当前客户端同步给当前地图的其他玩家的操作吗? 2025年5月26日18:49:05
 
+        Log.Info($"玩家:{curAccountID} 离开了地图{lastMapTypeID} 进入了地图{curMapTypeID}");
+        
         //   将其他玩家的信息推送给当前客户端
         {
             var curList = hallPlayerManager.GetHallPlayersInMap(curMapTypeID, curAccountID);
