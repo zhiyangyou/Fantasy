@@ -571,11 +571,14 @@ namespace Fantasy
 		}
 		public override void Dispose()
 		{
+			battle_role_datas.Clear();
 #if FANTASY_NET || FANTASY_UNITY
 			GetScene().MessagePoolComponent.Return<Msg_StartDungeonBattle>(this);
 #endif
 		}
 		public uint OpCode() { return OuterOpcode.Msg_StartDungeonBattle; }
+		[ProtoMember(1)]
+		public List<RoleData> battle_role_datas = new List<RoleData>();
 	}
 	[ProtoContract]
 	public partial class StateSyncData : AMessage, IProto
@@ -652,5 +655,105 @@ namespace Fantasy
 		public float y { get; set; }
 		[ProtoMember(3)]
 		public float z { get; set; }
+	}
+	[ProtoContract]
+	public partial class CSFixIntVector3 : AMessage, IProto
+	{
+		public static CSFixIntVector3 Create(Scene scene)
+		{
+			return scene.MessagePoolComponent.Rent<CSFixIntVector3>();
+		}
+		public override void Dispose()
+		{
+			x = default;
+			y = default;
+			z = default;
+#if FANTASY_NET || FANTASY_UNITY
+			GetScene().MessagePoolComponent.Return<CSFixIntVector3>(this);
+#endif
+		}
+		[ProtoMember(1)]
+		public int x { get; set; }
+		[ProtoMember(2)]
+		public int y { get; set; }
+		[ProtoMember(3)]
+		public int z { get; set; }
+	}
+	[ProtoContract]
+	public partial class Msg_C2S_FrameOpEvent : AMessage, IMessage, IProto
+	{
+		public static Msg_C2S_FrameOpEvent Create(Scene scene)
+		{
+			return scene.MessagePoolComponent.Rent<Msg_C2S_FrameOpEvent>();
+		}
+		public override void Dispose()
+		{
+			battle_id = default;
+			frame_operate_datas.Clear();
+#if FANTASY_NET || FANTASY_UNITY
+			GetScene().MessagePoolComponent.Return<Msg_C2S_FrameOpEvent>(this);
+#endif
+		}
+		public uint OpCode() { return OuterOpcode.Msg_C2S_FrameOpEvent; }
+		[ProtoMember(1)]
+		public long battle_id { get; set; }
+		[ProtoMember(2)]
+		public List<FrameOperateData> frame_operate_datas = new List<FrameOperateData>();
+	}
+	[ProtoContract]
+	public partial class Msg_S2C_FrameOpEvent : AMessage, IMessage, IProto
+	{
+		public static Msg_S2C_FrameOpEvent Create(Scene scene)
+		{
+			return scene.MessagePoolComponent.Rent<Msg_S2C_FrameOpEvent>();
+		}
+		public override void Dispose()
+		{
+			battle_id = default;
+			frame_operate_datas.Clear();
+			logic_frame_id = default;
+#if FANTASY_NET || FANTASY_UNITY
+			GetScene().MessagePoolComponent.Return<Msg_S2C_FrameOpEvent>(this);
+#endif
+		}
+		public uint OpCode() { return OuterOpcode.Msg_S2C_FrameOpEvent; }
+		[ProtoMember(1)]
+		public long battle_id { get; set; }
+		[ProtoMember(2)]
+		public List<FrameOperateData> frame_operate_datas = new List<FrameOperateData>();
+		[ProtoMember(3)]
+		public long logic_frame_id { get; set; }
+	}
+	[ProtoContract]
+	public partial class FrameOperateData : AMessage, IProto
+	{
+		public static FrameOperateData Create(Scene scene)
+		{
+			return scene.MessagePoolComponent.Rent<FrameOperateData>();
+		}
+		public override void Dispose()
+		{
+			operate_type = default;
+			input_dir = default;
+			skillId = default;
+			skillType = default;
+			skillPos = default;
+			account_id = default;
+#if FANTASY_NET || FANTASY_UNITY
+			GetScene().MessagePoolComponent.Return<FrameOperateData>(this);
+#endif
+		}
+		[ProtoMember(1)]
+		public int operate_type { get; set; }
+		[ProtoMember(2)]
+		public CSFixIntVector3 input_dir { get; set; }
+		[ProtoMember(3)]
+		public int skillId { get; set; }
+		[ProtoMember(4)]
+		public int skillType { get; set; }
+		[ProtoMember(5)]
+		public CSFixIntVector3 skillPos { get; set; }
+		[ProtoMember(6)]
+		public long account_id { get; set; }
 	}
 }

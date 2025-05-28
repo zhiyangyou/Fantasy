@@ -25,5 +25,7 @@ namespace Fantasy
 		 public const uint Msg_LoadDungeonProgress = 134227731;
 		 public const uint Msg_StartDungeonBattle = 134227732;
 		 public const uint Msg_OtherPlayerStateSync = 134227733;
+		 public const uint Msg_C2S_FrameOpEvent = 134227734;
+		 public const uint Msg_S2C_FrameOpEvent = 134227735;
 	}
 }

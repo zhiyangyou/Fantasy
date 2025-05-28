@@ -25,6 +25,8 @@ public class Component_BattleManager : Entity {
     public void StartBattle(List<Model_Role> players) {
         var modelBattle = Entity.Create<Model_Battle>(Scene, true, false);
         var battleID = NextBattleID;
+        modelBattle.Init(battleID, players);
         _dicAllBattles.TryAdd(battleID, modelBattle);
+        modelBattle.BattleStart();
     }
 }

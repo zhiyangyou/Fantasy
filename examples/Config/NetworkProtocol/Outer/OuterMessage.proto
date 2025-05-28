@@ -178,8 +178,8 @@ message Msg_LoadDungeonProgress // IMessage
 
 // 开始地下城战斗
 message Msg_StartDungeonBattle // IMessage 
-{ 
-  
+{
+  repeated RoleData battle_role_datas = 1;
 }
 
 
@@ -211,3 +211,38 @@ message  CSVector3
   float z = 3;
 }
 
+message  CSFixIntVector3
+{
+  int32 x = 1;
+  int32 y = 2;
+  int32 z = 3;
+}
+
+
+// ----------------战斗帧同步-----------------
+
+// 帧操作事件 客户端打包帧操作数据给服务器
+message Msg_C2S_FrameOpEvent // IMessage 
+{
+  int64 battle_id = 1; // 战斗id
+  repeated FrameOperateData frame_operate_datas = 2; // 帧操作事件列表
+}
+
+// 帧操作事件广播: 服务端广播客户端的数据给多个客户端
+message Msg_S2C_FrameOpEvent // IMessage 
+{
+  int64 battle_id = 1; // 战斗id
+  repeated FrameOperateData frame_operate_datas = 2; // 帧操作事件列表
+  int64 logic_frame_id = 3;
+}
+
+// 操作帧数据
+message FrameOperateData
+{
+  int32 operate_type = 1; // 0:无操作 1:方向输入 2:释放技能
+  CSFixIntVector3 input_dir = 2; // 输入方向
+  int32 skillId = 3; // 技能id
+  int32 skillType = 4; // 技能类型
+  CSFixIntVector3 skillPos = 5; // 技能位置: 引导位置等...
+  int64  account_id = 6; // 用户
+}

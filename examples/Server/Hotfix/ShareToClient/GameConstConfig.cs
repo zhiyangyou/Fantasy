@@ -16,5 +16,16 @@
         /// 队伍最多人数
         /// </summary>
         public const int TeamMaxNum = 4;
+
+
+        /// <summary>
+        /// 逻辑帧间隔
+        /// </summary>
+        public static float LogicFrameInterval = 0.066f;
+
+        /// <summary>
+        /// 逻辑帧间隔 （毫秒）
+        /// </summary>
+        public static int LogicFrameIntervalMS = 66;
     }
 }
