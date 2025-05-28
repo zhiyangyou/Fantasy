@@ -5,9 +5,22 @@ using ServerShareToClient;
 
 namespace Hotfix.Component;
 
+public class TeamMember {
+    public Model_Role ModelRole;
+    public float LoadProgress;
+
+    public bool IsLoadComplete => LoadProgress >= 1f;
+
+    public TeamMember(Model_Role modelRole) {
+        ModelRole = modelRole;
+        LoadProgress = 0f;
+    }
+
+    private TeamMember() { }
+}
+
 public class TeamInfo {
-    public List<Model_Role> Members { get; private set; } = new();
-    // private List<Model_Role> Members = new();
+    public List<TeamMember> Members { get; private set; } = new();
 
     public bool IsFull => Members.Count >= GameConstConfig.MaxSyncStateCount;
 
@@ -16,9 +29,9 @@ public class TeamInfo {
             return false;
         }
         else {
-            var index = Members.FindIndex(role => role.account_id == member.account_id);
+            var index = Members.FindIndex(role => role.ModelRole.account_id == member.account_id);
             if (index < 0) {
-                Members.Add(member);
+                Members.Add(new TeamMember(member));
                 return true;
             }
             else {
@@ -28,7 +41,7 @@ public class TeamInfo {
     }
 
     public bool RemoveMember(long account_id) {
-        var index = Members.FindIndex(role => role.account_id == account_id);
+        var index = Members.FindIndex(role => role.ModelRole.account_id == account_id);
         if (index < 0) {
             return false;
         }
@@ -54,8 +67,20 @@ public class TeamInfo {
             return false;
         }
         else {
-            return Members[0].account_id == account_id;
+            return Members[0].ModelRole.account_id == account_id;
         }
+    }
+
+    public void UpdateLoadProgress(long accountId, float progress) {
+        for (int i = 0; i < Members.Count; i++) {
+            if (Members[i].ModelRole.account_id == accountId) {
+                Members[i].LoadProgress = progress;
+            }
+        }
+    }
+
+    public bool AllLoadComplete() {
+        return Members.All(member => member.IsLoadComplete);
     }
 }
 
@@ -95,7 +120,7 @@ public class Component_TeamManager : Entity {
         if (!_dicTeamInfos.TryGetValue(teamid, out var teamInfo)) {
             return null;
         }
-        return teamInfo.Members;
+        return teamInfo.Members.Select(member => member.ModelRole).ToList();
     }
 
     public async Task<(uint errorCode, int teamID, List<Model_Role>? modelRoles, Model_Role curModelRole)> JoinTeam(long account_id, int teamID) {
@@ -123,7 +148,7 @@ public class Component_TeamManager : Entity {
                 return (ErrorCode.JoinTeam_TeamAddFailed, -1, null, null);
             }
             _dicAccountIDWithTeamID.TryAdd(account_id, teamID);
-            return (ErrorCode.Success, teamID, teamInfo.Members, thisPlayer.role);
+            return (ErrorCode.Success, teamID, teamInfo.Members.Select(member => member.ModelRole).ToList(), thisPlayer.role);
         }
     }
 
@@ -143,7 +168,7 @@ public class Component_TeamManager : Entity {
         int newTeamID = NextTeamID;
 
         var newTeamList = new TeamInfo();
-        newTeamList.Members.Add(modelRole);
+        newTeamList.Members.Add(new TeamMember(modelRole));
         _dicTeamInfos.AddOrUpdate(newTeamID, id => newTeamList, (i, oldList) => newTeamList);
         _dicAccountIDWithTeamID.AddOrUpdate(account_id, id => newTeamID, (oldAccount, oldTeamID) => newTeamID);
         return (ErrorCode.Success, newTeamID, modelRole);
@@ -166,7 +191,7 @@ public class Component_TeamManager : Entity {
                 msg.team_state = (int)TeamOpStatus.TeamDispose;
                 BroadcastMsgToOthoerPlyers(teamInfo, msg, accountId);
                 foreach (var member in teamInfo.Members) {
-                    _dicAccountIDWithTeamID.TryRemove(member.account_id, out _);
+                    _dicAccountIDWithTeamID.TryRemove(member.ModelRole.account_id, out _);
                 }
                 _dicTeamInfos.TryRemove(teamID, out _);
             }
@@ -179,16 +204,40 @@ public class Component_TeamManager : Entity {
         }
     }
 
+    /// <summary>
+    /// 计算全部成员是否加载完成
+    /// </summary>
+    /// <returns></returns>
+    public void TryUpdateTeamMemberLoadProgress(int teamID, long account_id, float progress) {
+        if (!_dicTeamInfos.TryGetValue(teamID, out var teamInfo)) {
+            Log.Error($"TryUpdateTeamMemberLoadProgress 传入了错误的队伍ID teamID:{teamID}");
+            return;
+        }
+        else {
+            teamInfo.UpdateLoadProgress(account_id, progress);
+        }
+    }
+
+    public bool IsAllTeamMemberLoadComplete(int teamID) {
+        if (!_dicTeamInfos.TryGetValue(teamID, out var teamInfo)) {
+            Log.Error($"IsAllTeamMemberLoadComplete 传入了错误的队伍ID teamID:{teamID}");
+            return false;
+        }
+        else {
+            return teamInfo.AllLoadComplete();
+        }
+    }
+
     #endregion
 
     #region private
 
     private void BroadcastMsgToOthoerPlyers(TeamInfo teamInfo, Msg_TeamStateChanged msg, long accountId) {
-        Model_Role modelRoleWhoChanged = teamInfo.Members.First(role => role.account_id == accountId);
+        Model_Role modelRoleWhoChanged = teamInfo.Members.First(role => role.ModelRole.account_id == accountId).ModelRole;
         foreach (var modelRole in teamInfo.Members) {
-            if (modelRole.account_id != modelRoleWhoChanged.account_id) {
+            if (modelRole.ModelRole.account_id != modelRoleWhoChanged.account_id) {
                 msg.role_data = modelRoleWhoChanged.ToRoleData();
-                modelRole.session.Send(msg);
+                modelRole.ModelRole.session.Send(msg);
             }
         }
     }
