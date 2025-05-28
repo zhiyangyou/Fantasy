@@ -3,6 +3,7 @@ using Fantasy.Async;
 using Fantasy.Event;
 using Fantasy.Model;
 using Hotfix.Component;
+using Hotfix.Component.Battle;
 using Hotfix.Share;
 
 namespace Hotfix;
@@ -31,6 +32,7 @@ public class Event_OnSceneCreate : IAsyncEvent {
                 scene.AddComponent<Component_RoleManager>();
                 scene.AddComponent<Component_HallPlayerManager>();
                 scene.AddComponent<Component_TeamManager>();
+                scene.AddComponent<Component_BattleManager>();
             }
         }
         return FTask.Create();

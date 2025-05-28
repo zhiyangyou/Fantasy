@@ -13,7 +13,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Gate\" />
       <Folder Include="Handlers\" />
       <Folder Include="MapConfig\ConfigData\" />
       <Folder Include="Tools\" />

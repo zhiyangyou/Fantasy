@@ -4,6 +4,7 @@ using Fantasy.Async;
 using Fantasy.Network;
 using Fantasy.Network.Interface;
 using Hotfix.Component;
+using Hotfix.Component.Battle;
 
 namespace Hotfix.Handlers.Outer.Game;
 
@@ -26,19 +27,32 @@ public class Handler_LoadDungeonProgress : Message<Msg_LoadDungeonProgress> {
             Log.Error("推送进入地下城加载进度消息, 队伍不存在");
         }
 
+        Process_LoadProgressComplete(teamComponent, session, message);
+        await FTask.CompletedTask;
+    }
+
+
+    private void Process_LoadProgressComplete(Component_TeamManager teamComponent, Session session, Msg_LoadDungeonProgress message) {
         bool isAllComplete = teamComponent.IsAllTeamMemberLoadComplete(message.team_id);
 
         if (isAllComplete) {
-            teamComponent.ResetLoadProgress(message.team_id);
-            Msg_StartDungeonBattle msgStartDungeonBattle = new();
-            var listAllMembers = teamComponent.GetTeamRoleListByTeamID(message.team_id);
-            if (listAllMembers != null) {
-                foreach (var member in listAllMembers) {
-                    member.session.Send(msgStartDungeonBattle);
-                    Log.Info($"队伍:{message.team_id} 通知玩家 {member.role_name} 开始战斗");
+            FTask.OnceTimer(session.Scene, 1000, async () => {
+                teamComponent.ResetLoadProgress(message.team_id);
+                Msg_StartDungeonBattle msgStartDungeonBattle = new();
+                var listAllMembers = teamComponent.GetTeamRoleListByTeamID(message.team_id);
+                if (listAllMembers != null) {
+                    foreach (var member in listAllMembers) {
+                        member.session.Send(msgStartDungeonBattle);
+                        Log.Info($"队伍:{message.team_id} 通知玩家 {member.role_name} 开始战斗");
+                    }
                 }
-            }
+                Process_StartBattle(session, listAllMembers);
+            });
         }
-        await FTask.CompletedTask;
+    }
+
+    private void Process_StartBattle(Session session, List<Model_Role> listPlayers) {
+        var battleManager = session.GetComponent<Component_BattleManager>();
+        battleManager.StartBattle(listPlayers);
     }
 }

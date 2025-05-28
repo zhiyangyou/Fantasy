@@ -11,4 +11,10 @@
         MemberLeave = 2, // 2.玩家离开
         TeamDispose = 3, // 3.队伍解散
     }
+
+        public enum BattleStateEnum {
+        None,
+        Start,
+        End,
+    }
 }

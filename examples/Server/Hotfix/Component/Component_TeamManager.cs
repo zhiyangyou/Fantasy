@@ -108,7 +108,7 @@ public class Component_TeamManager : Entity {
 
     private int teamID = 10000;
 
-    private const int TeamLockKey = 10000;
+    
 
     private int NextTeamID {
         get {
