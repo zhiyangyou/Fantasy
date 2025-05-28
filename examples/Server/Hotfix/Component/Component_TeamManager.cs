@@ -5,6 +5,60 @@ using ServerShareToClient;
 
 namespace Hotfix.Component;
 
+public class TeamInfo {
+    public List<Model_Role> Members { get; private set; } = new();
+    // private List<Model_Role> Members = new();
+
+    public bool IsFull => Members.Count >= GameConstConfig.MaxSyncStateCount;
+
+    public bool AddMember(Model_Role member) {
+        if (member == null) {
+            return false;
+        }
+        else {
+            var index = Members.FindIndex(role => role.account_id == member.account_id);
+            if (index < 0) {
+                Members.Add(member);
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+    }
+
+    public bool RemoveMember(long account_id) {
+        var index = Members.FindIndex(role => role.account_id == account_id);
+        if (index < 0) {
+            return false;
+        }
+        else {
+            Members.RemoveAt(index);
+            return true;
+        }
+    }
+
+
+    public bool RemoveMember(Model_Role member) {
+        if (member == null) {
+            return false;
+        }
+        else {
+            return RemoveMember(member.account_id);
+        }
+    }
+
+
+    public bool IsLeader(long account_id) {
+        if (Members.Count <= 0) {
+            return false;
+        }
+        else {
+            return Members[0].account_id == account_id;
+        }
+    }
+}
+
 public class Component_TeamManager : Entity {
     #region 属性和字段
 
@@ -12,7 +66,7 @@ public class Component_TeamManager : Entity {
     /// key: teamID
     /// value: 队伍成员
     /// </summary>
-    private ConcurrentDictionary<int, List<Model_Role>> _dicTeamInfos = new();
+    private ConcurrentDictionary<int, TeamInfo> _dicTeamInfos = new();
 
     /// <summary>
     /// 记录哪个用户在哪个队伍中
@@ -39,7 +93,7 @@ public class Component_TeamManager : Entity {
 
     public async Task<(uint errorCode, int teamID, List<Model_Role>? modelRoles, Model_Role curModelRole)> JoinTeam(long account_id, int teamID) {
         // 队伍存在
-        if (!_dicTeamInfos.TryGetValue(teamID, out var teamMembers)) {
+        if (!_dicTeamInfos.TryGetValue(teamID, out var teamInfo)) {
             return (ErrorCode.JoinTeam_TeamNotExist, -1, null, null);
         }
 
@@ -50,16 +104,19 @@ public class Component_TeamManager : Entity {
             return (ErrorCode.JoinTeam_PlayerNotExist, -1, null, null);
         }
         using (await Scene.CoroutineLockComponent.Wait(LockKeys.LockKey_TeamOp, LockKeys.LockKey_TeamOp, "JoinTeam")) {
-            if (teamMembers != null && teamMembers.Count >= GameConstConfig.MaxSyncStateCount) {
+            if (teamInfo.IsFull) {
                 return (ErrorCode.JoinTeam_TeamFullMember, -1, null, null);
             }
             if (_dicAccountIDWithTeamID.ContainsKey(account_id)) {
                 return (ErrorCode.JoinTeam_PlayerHasTeam, -1, null, null);
             }
 
-            teamMembers.Add(thisPlayer.role);
+            var addSuccess = teamInfo.AddMember(thisPlayer.role);
+            if (!addSuccess) {
+                return (ErrorCode.JoinTeam_TeamAddFailed, -1, null, null);
+            }
             _dicAccountIDWithTeamID.TryAdd(account_id, teamID);
-            return (ErrorCode.Success, teamID, teamMembers, thisPlayer.role);
+            return (ErrorCode.Success, teamID, teamInfo.Members, thisPlayer.role);
         }
     }
 
@@ -78,34 +135,55 @@ public class Component_TeamManager : Entity {
         var modelRole = hallPlayer.role;
         int newTeamID = NextTeamID;
 
-        var newTeamList = new List<Model_Role>() { modelRole };
+        var newTeamList = new TeamInfo();
+        newTeamList.Members.Add(modelRole);
         _dicTeamInfos.AddOrUpdate(newTeamID, id => newTeamList, (i, oldList) => newTeamList);
         _dicAccountIDWithTeamID.AddOrUpdate(account_id, id => newTeamID, (oldAccount, oldTeamID) => newTeamID);
         return (ErrorCode.Success, newTeamID, modelRole);
     }
 
 
-    public void Process_PlayerDisconnect(long accountId) {
-        DisposeTeam(accountId);
+    public async void Process_PlayerDisconnect(long accountId) {
+        // 是否在队伍中
+        if (!_dicAccountIDWithTeamID.TryGetValue(accountId, out var inThisTeam)) {
+            return;
+        }
+        using (await this.Scene.CoroutineLockComponent.Wait(LockKeys.LockKey_TeamOp, LockKeys.LockKey_TeamOp, "player dicconnect ,process Team")) {
+            if (!_dicTeamInfos.TryGetValue(inThisTeam, out var teamInfo)) {
+                _dicAccountIDWithTeamID.TryRemove(accountId, out _);
+                return;
+            }
+            var msg = new Msg_TeamStateChanged();
+            var isLeader = teamInfo.IsLeader(accountId);
+            if (isLeader) {
+                msg.team_state = (int)TeamOpStatus.TeamDispose;
+                BroadcastMsgToOthoerPlyers(teamInfo, msg, accountId);
+                _dicAccountIDWithTeamID.TryRemove(accountId, out _);
+                _dicTeamInfos.TryRemove(teamID, out _);
+            }
+            else {
+                msg.team_state = (int)TeamOpStatus.MemberLeave;
+                BroadcastMsgToOthoerPlyers(teamInfo, msg, accountId);
+                _dicAccountIDWithTeamID.TryRemove(accountId, out _);
+                teamInfo.RemoveMember(accountId);
+            }
+        }
     }
 
     #endregion
 
     #region private
 
-    /// <summary>
-    /// 解散队伍
-    /// </summary>
-    public void DisposeTeam(long accountId) {
-        if (_dicAccountIDWithTeamID.TryRemove(accountId, out var removeTeamID)) {
-            _dicTeamInfos.TryRemove(removeTeamID, out var listTeamMember);
-            if (listTeamMember != null) {
-                foreach (var modelRole in listTeamMember) {
-                    // TODO 通知队伍中的玩家
-                }
+    public void BroadcastMsgToOthoerPlyers(TeamInfo teamInfo, Msg_TeamStateChanged msg, long accountId) {
+        Model_Role modelRoleWhoChanged = teamInfo.Members.First(role => role.account_id == accountId);
+        foreach (var modelRole in teamInfo.Members) {
+            if (modelRole.account_id != modelRoleWhoChanged.account_id) {
+                msg.role_data = modelRoleWhoChanged.ToRoleData();
+                modelRole.session.Send(msg);
             }
         }
     }
+    
 
     #endregion
 }

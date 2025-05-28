@@ -11,19 +11,18 @@ public class Component_SessionDispose : Entity {
     public long account_id;
 
     public override void Dispose() {
+        Process_TeamManager();
         Process_HallPlayerManager();
         Process_RoleManager();
-        Process_TeamManager();
         base.Dispose();
     }
-
 
 
     private void Process_TeamManager() {
         var roleManager = this.Scene.GetComponent<Component_TeamManager>();
         roleManager.Process_PlayerDisconnect(account_id);
     }
-    
+
     private void Process_RoleManager() {
         var roleManager = this.Scene.GetComponent<Component_RoleManager>();
         roleManager.Process_PlayerDisconnect(account_id);

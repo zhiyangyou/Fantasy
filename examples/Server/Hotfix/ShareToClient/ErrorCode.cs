@@ -21,5 +21,6 @@
         public const uint JoinTeam_TeamFullMember = 1602; //  队伍满员
         public const uint JoinTeam_PlayerNotExist = 1603; //  想要加入队伍的玩家不存在
         public const uint JoinTeam_PlayerHasTeam = 1604; //  想要加入队伍的玩家不存在
+        public const uint JoinTeam_TeamAddFailed = 1605; //  想要加入队伍的玩家不存在
     }
 }
