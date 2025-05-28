@@ -19,6 +19,7 @@ public class Model_Role : Entity, ISupportedDataBase {
             level = this.level,
             role_name = this.role_name,
             uid = this.Id,
+            account_id = this.account_id,
         };
     }
 }

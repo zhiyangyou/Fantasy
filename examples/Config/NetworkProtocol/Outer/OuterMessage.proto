@@ -61,6 +61,7 @@ message RoleData
   string role_name = 2; // 名字
   int32 level = 3; // 等级
   int32 role_id = 4; // 用于区分职业 
+  int64 account_id = 5; // 所属账号id 
 }
 
 message Send_CreateRole // IRequest ,Rcv_CreateRole

@@ -91,6 +91,13 @@ public class Component_TeamManager : Entity {
 
     #region public
 
+    public List<Model_Role>? GetTeamRoleListByTeamID(int teamid) {
+        if (!_dicTeamInfos.TryGetValue(teamid, out var teamInfo)) {
+            return null;
+        }
+        return teamInfo.Members;
+    }
+
     public async Task<(uint errorCode, int teamID, List<Model_Role>? modelRoles, Model_Role curModelRole)> JoinTeam(long account_id, int teamID) {
         // 队伍存在
         if (!_dicTeamInfos.TryGetValue(teamID, out var teamInfo)) {
@@ -174,7 +181,7 @@ public class Component_TeamManager : Entity {
 
     #region private
 
-    public void BroadcastMsgToOthoerPlyers(TeamInfo teamInfo, Msg_TeamStateChanged msg, long accountId) {
+    private void BroadcastMsgToOthoerPlyers(TeamInfo teamInfo, Msg_TeamStateChanged msg, long accountId) {
         Model_Role modelRoleWhoChanged = teamInfo.Members.First(role => role.account_id == accountId);
         foreach (var modelRole in teamInfo.Members) {
             if (modelRole.account_id != modelRoleWhoChanged.account_id) {
@@ -183,7 +190,6 @@ public class Component_TeamManager : Entity {
             }
         }
     }
-    
 
     #endregion
 }

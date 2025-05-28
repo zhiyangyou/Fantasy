@@ -189,6 +189,7 @@ namespace Fantasy
 			role_name = default;
 			level = default;
 			role_id = default;
+			account_id = default;
 #if FANTASY_NET || FANTASY_UNITY
 			GetScene().MessagePoolComponent.Return<RoleData>(this);
 #endif
@@ -201,6 +202,8 @@ namespace Fantasy
 		public int level { get; set; }
 		[ProtoMember(4)]
 		public int role_id { get; set; }
+		[ProtoMember(5)]
+		public long account_id { get; set; }
 	}
 	[ProtoContract]
 	public partial class Send_CreateRole : AMessage, IRequest, IProto
