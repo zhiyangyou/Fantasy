@@ -165,7 +165,9 @@ public class Component_TeamManager : Entity {
             if (isLeader) {
                 msg.team_state = (int)TeamOpStatus.TeamDispose;
                 BroadcastMsgToOthoerPlyers(teamInfo, msg, accountId);
-                _dicAccountIDWithTeamID.TryRemove(accountId, out _);
+                foreach (var member in teamInfo.Members) {
+                    _dicAccountIDWithTeamID.TryRemove(member.account_id, out _);
+                }
                 _dicTeamInfos.TryRemove(teamID, out _);
             }
             else {
