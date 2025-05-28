@@ -11,5 +11,10 @@
         /// FixedUpdate每隔这个数值, 向后端同步一下这个状态
         /// </summary>
         public static int MaxSyncStateCount => 5;
+
+        /// <summary>
+        /// 队伍最多人数
+        /// </summary>
+        public const int TeamMaxNum = 4;
     }
 }

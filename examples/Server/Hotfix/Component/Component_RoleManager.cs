@@ -115,7 +115,7 @@ public class Component_RoleManager : Entity {
             modelRole.role_id = role_id;
             modelRole.account_id = account_id;
             modelRole.level = 1;
-
+            
             _dicRoles.TryAdd(modelRole.role_name, modelRole);
 
             await db.Save(modelRole);

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Concurrent;
+using Fantasy;
 using Fantasy.Entitas;
 using ServerShareToClient;
 
@@ -14,12 +15,15 @@ public class Component_TeamManager : Entity {
     private ConcurrentDictionary<int, List<Model_Role>> _dicTeamInfos = new();
 
     /// <summary>
+    /// 记录哪个用户在哪个队伍中
     /// key: account_id
-    /// value: 该用户创建的队伍
+    /// value: 该account_id所在的队伍ID
     /// </summary>
-    private ConcurrentDictionary<long, int> _dicAlreadyCreatedTeams = new();
+    private ConcurrentDictionary<long, int> _dicAccountIDWithTeamID = new();
 
     private int teamID = 10000;
+
+    private const int TeamLockKey = 10000;
 
     private int NextTeamID {
         get {
@@ -33,8 +37,34 @@ public class Component_TeamManager : Entity {
 
     #region public
 
+    public async Task<(uint errorCode, int teamID, List<Model_Role>? modelRoles, Model_Role curModelRole)> JoinTeam(long account_id, int teamID) {
+        // 队伍存在
+        if (!_dicTeamInfos.TryGetValue(teamID, out var teamMembers)) {
+            return (ErrorCode.JoinTeam_TeamNotExist, -1, null, null);
+        }
+
+
+        var hallPlayerManager = this.Scene.GetComponent<Component_HallPlayerManager>();
+        var thisPlayer = hallPlayerManager.FindHallPlayer(account_id);
+        if (thisPlayer == null) {
+            return (ErrorCode.JoinTeam_PlayerNotExist, -1, null, null);
+        }
+        using (await Scene.CoroutineLockComponent.Wait(LockKeys.LockKey_TeamOp, LockKeys.LockKey_TeamOp, "JoinTeam")) {
+            if (teamMembers != null && teamMembers.Count >= GameConstConfig.MaxSyncStateCount) {
+                return (ErrorCode.JoinTeam_TeamFullMember, -1, null, null);
+            }
+            if (_dicAccountIDWithTeamID.ContainsKey(account_id)) {
+                return (ErrorCode.JoinTeam_PlayerHasTeam, -1, null, null);
+            }
+
+            teamMembers.Add(thisPlayer.role);
+            _dicAccountIDWithTeamID.TryAdd(account_id, teamID);
+            return (ErrorCode.Success, teamID, teamMembers, thisPlayer.role);
+        }
+    }
+
     public async Task<(uint errorCode, int teamID, Model_Role? modelRole)> CreateTeam(long account_id) {
-        if (_dicAlreadyCreatedTeams.ContainsKey(account_id)) {
+        if (_dicAccountIDWithTeamID.ContainsKey(account_id)) {
             return (ErrorCode.CreateTeam_TeamExist, -1, null);
         }
 
@@ -50,7 +80,7 @@ public class Component_TeamManager : Entity {
 
         var newTeamList = new List<Model_Role>() { modelRole };
         _dicTeamInfos.AddOrUpdate(newTeamID, id => newTeamList, (i, oldList) => newTeamList);
-        _dicAlreadyCreatedTeams.AddOrUpdate(account_id, id => newTeamID, (oldAccount, oldTeamID) => newTeamID);
+        _dicAccountIDWithTeamID.AddOrUpdate(account_id, id => newTeamID, (oldAccount, oldTeamID) => newTeamID);
         return (ErrorCode.Success, newTeamID, modelRole);
     }
 
@@ -67,7 +97,7 @@ public class Component_TeamManager : Entity {
     /// 解散队伍
     /// </summary>
     public void DisposeTeam(long accountId) {
-        if (_dicAlreadyCreatedTeams.TryRemove(accountId, out var removeTeamID)) {
+        if (_dicAccountIDWithTeamID.TryRemove(accountId, out var removeTeamID)) {
             _dicTeamInfos.TryRemove(removeTeamID, out var listTeamMember);
             foreach (var modelRole in listTeamMember) {
                 // TODO 通知队伍中的玩家

@@ -16,5 +16,10 @@
 
         public const uint CreateTeam_TeamExist = 1501; //  队伍已经创建了
         public const uint CreateTeam_PlayerUnvalid = 1501; //  队伍已经创建了
+
+        public const uint JoinTeam_TeamNotExist = 1601; //  队伍不存在
+        public const uint JoinTeam_TeamFullMember = 1602; //  队伍满员
+        public const uint JoinTeam_PlayerNotExist = 1603; //  想要加入队伍的玩家不存在
+        public const uint JoinTeam_PlayerHasTeam = 1604; //  想要加入队伍的玩家不存在
     }
 }

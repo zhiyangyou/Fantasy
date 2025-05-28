@@ -1,6 +1,7 @@
 ﻿using Fantasy;
 using Fantasy.Entitas;
 using Fantasy.Network;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace Hotfix.Model.Hall;
 
@@ -12,6 +13,7 @@ public class Model_HallPlayer : Entity {
 
     public Model_Role role;
 
+    [BsonIgnore] // 不写入数据库
     public Session session;
 
     /// <summary>
