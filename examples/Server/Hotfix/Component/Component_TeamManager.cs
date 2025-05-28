@@ -24,6 +24,12 @@ public class TeamInfo {
 
     public bool IsFull => Members.Count >= GameConstConfig.MaxSyncStateCount;
 
+    public void ResetTeamMemberLoadProgress() {
+        foreach (var member in Members) {
+            member.LoadProgress = 0f;
+        }
+    }
+
     public bool AddMember(Model_Role member) {
         if (member == null) {
             return false;
@@ -243,4 +249,12 @@ public class Component_TeamManager : Entity {
     }
 
     #endregion
+
+    public async void ResetLoadProgress(int teamID) {
+        if (_dicTeamInfos.TryGetValue(teamID, out var teamInfo)) {
+            using (await Scene.CoroutineLockComponent.Wait(LockKeys.LockKey_ResetProgress, teamID, "Team Reset Load Progress")) {
+                teamInfo.ResetTeamMemberLoadProgress();
+            }
+        }
+    }
 }

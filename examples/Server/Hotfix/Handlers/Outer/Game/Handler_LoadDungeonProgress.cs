@@ -29,6 +29,7 @@ public class Handler_LoadDungeonProgress : Message<Msg_LoadDungeonProgress> {
         bool isAllComplete = teamComponent.IsAllTeamMemberLoadComplete(message.team_id);
 
         if (isAllComplete) {
+            teamComponent.ResetLoadProgress(message.team_id);
             Msg_StartDungeonBattle msgStartDungeonBattle = new();
             var listAllMembers = teamComponent.GetTeamRoleListByTeamID(message.team_id);
             if (listAllMembers != null) {
