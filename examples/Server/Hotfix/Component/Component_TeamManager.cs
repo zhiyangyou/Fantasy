@@ -99,8 +99,10 @@ public class Component_TeamManager : Entity {
     public void DisposeTeam(long accountId) {
         if (_dicAccountIDWithTeamID.TryRemove(accountId, out var removeTeamID)) {
             _dicTeamInfos.TryRemove(removeTeamID, out var listTeamMember);
-            foreach (var modelRole in listTeamMember) {
-                // TODO 通知队伍中的玩家
+            if (listTeamMember != null) {
+                foreach (var modelRole in listTeamMember) {
+                    // TODO 通知队伍中的玩家
+                }
             }
         }
     }
