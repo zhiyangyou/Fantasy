@@ -512,6 +512,69 @@ namespace Fantasy
 		public uint ErrorCode { get; set; }
 	}
 	[ProtoContract]
+	public partial class Msg_EnterDungeon : AMessage, IMessage, IProto
+	{
+		public static Msg_EnterDungeon Create(Scene scene)
+		{
+			return scene.MessagePoolComponent.Rent<Msg_EnterDungeon>();
+		}
+		public override void Dispose()
+		{
+			team_id = default;
+			dungeonCfgID = default;
+			teamMembers.Clear();
+#if FANTASY_NET || FANTASY_UNITY
+			GetScene().MessagePoolComponent.Return<Msg_EnterDungeon>(this);
+#endif
+		}
+		public uint OpCode() { return OuterOpcode.Msg_EnterDungeon; }
+		[ProtoMember(1)]
+		public int team_id { get; set; }
+		[ProtoMember(2)]
+		public int dungeonCfgID { get; set; }
+		[ProtoMember(3)]
+		public List<RoleData> teamMembers = new List<RoleData>();
+	}
+	[ProtoContract]
+	public partial class Msg_LoadDungeonProgress : AMessage, IMessage, IProto
+	{
+		public static Msg_LoadDungeonProgress Create(Scene scene)
+		{
+			return scene.MessagePoolComponent.Rent<Msg_LoadDungeonProgress>();
+		}
+		public override void Dispose()
+		{
+			team_id = default;
+			account_id = default;
+			progress = default;
+#if FANTASY_NET || FANTASY_UNITY
+			GetScene().MessagePoolComponent.Return<Msg_LoadDungeonProgress>(this);
+#endif
+		}
+		public uint OpCode() { return OuterOpcode.Msg_LoadDungeonProgress; }
+		[ProtoMember(1)]
+		public int team_id { get; set; }
+		[ProtoMember(2)]
+		public long account_id { get; set; }
+		[ProtoMember(3)]
+		public float progress { get; set; }
+	}
+	[ProtoContract]
+	public partial class Msg_StartDungeonBattle : AMessage, IMessage, IProto
+	{
+		public static Msg_StartDungeonBattle Create(Scene scene)
+		{
+			return scene.MessagePoolComponent.Rent<Msg_StartDungeonBattle>();
+		}
+		public override void Dispose()
+		{
+#if FANTASY_NET || FANTASY_UNITY
+			GetScene().MessagePoolComponent.Return<Msg_StartDungeonBattle>(this);
+#endif
+		}
+		public uint OpCode() { return OuterOpcode.Msg_StartDungeonBattle; }
+	}
+	[ProtoContract]
 	public partial class StateSyncData : AMessage, IProto
 	{
 		public static StateSyncData Create(Scene scene)

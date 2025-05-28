@@ -156,6 +156,30 @@ message Rcv_StateSync  // IResponse
 }
 
 
+// ----------------副本相关协议-----------------
+
+// 进入地下城的通知
+message Msg_EnterDungeon // IMessage 
+{
+  int32 team_id = 1; // 队伍ID
+  int32 dungeonCfgID = 2; // 进入哪个地下城
+  repeated  RoleData teamMembers = 3 ; // 队伍成员列表
+}
+
+// 客户端加载地下城通知
+message Msg_LoadDungeonProgress // IMessage 
+{
+  int32 team_id = 1;
+  int64 account_id = 2;
+  float progress = 3 ; // 地下城加载进度 (0~1)
+}
+
+
+// 开始地下城战斗
+message Msg_StartDungeonBattle // IMessage 
+{ 
+  
+}
 
 
 

@@ -21,6 +21,9 @@ namespace Fantasy
 		 public const uint Msg_TeamStateChanged = 134227729;
 		 public const uint Send_StateSync = 268445465;
 		 public const uint Rcv_StateSync = 402663193;
-		 public const uint Msg_OtherPlayerStateSync = 134227730;
+		 public const uint Msg_EnterDungeon = 134227730;
+		 public const uint Msg_LoadDungeonProgress = 134227731;
+		 public const uint Msg_StartDungeonBattle = 134227732;
+		 public const uint Msg_OtherPlayerStateSync = 134227733;
 	}
 }
