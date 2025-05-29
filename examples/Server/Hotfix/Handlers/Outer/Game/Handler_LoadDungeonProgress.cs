@@ -54,7 +54,7 @@ public class Handler_LoadDungeonProgress : Message<Msg_LoadDungeonProgress> {
     }
 
     private void Process_StartBattle(Session session, List<Model_Role> listPlayers) {
-        var battleManager = session.GetComponent<Component_BattleManager>();
+        var battleManager = session.Scene.GetComponent<Component_BattleManager>();
         battleManager.StartBattle(listPlayers);
     }
 }

@@ -240,7 +240,7 @@ message Msg_S2C_FrameOpEvent // IMessage
 // 操作帧数据
 message FrameOperateData
 {
-  int32 operate_type = 1; // 0:无操作 1:方向输入 2:释放技能
+  int32 operate_type = 1; // 0:无操作 1:方向输入 2:释放技能 // EBattlePlayerOpType
   CSFixIntVector3 input_dir = 2; // 输入方向
   int32 skillId = 3; // 技能id
   int32 skillType = 4; // 技能类型

@@ -12,9 +12,22 @@
         TeamDispose = 3, // 3.队伍解散
     }
 
-        public enum BattleStateEnum {
+    public enum BattleStateEnum {
         None,
         Start,
         End,
+    }
+
+    public enum EBattlePlayerOpType {
+        None, // 0:无操作
+        InputMove, // 1:方向输入
+        ReleaseSkill, // 2:释放技能 // EBattlePlayerOpType
+    }
+
+    public enum EBattleOperateSkillType {
+        None,
+        ClickSkill, // 点击触发技能
+        GuideSkill, // 位置引导技能
+        StockPileTriggerSkill, // 蓄力技能
     }
 }
