@@ -7,6 +7,7 @@ using Fantasy.Entitas.Interface;
 using Fantasy.Helper;
 using Fantasy.InnerMessage;
 using Fantasy.Timer;
+using UnityEngine;
 
 #if FANTASY_UNITY
 
@@ -80,6 +81,7 @@ namespace Fantasy.Network
 
         private void CheckTimeOut()
         {
+            Debug.LogError($"{TimeHelper.Now - LastTime} {TimeOut}");
             if (TimeHelper.Now - LastTime < TimeOut)
             {
                 return;
@@ -134,7 +136,9 @@ namespace Fantasy.Network
             try
             {
                 var requestTime = TimeHelper.Now;
+                // UnityEngine.Debug.LogError("request ping >>>");
                 var pingResponse = (PingResponse)await session.Call(_pingRequest);
+                // UnityEngine.Debug.LogError("resp ping <<<<");
                
                 if (pingResponse.ErrorCode != 0)
                 {

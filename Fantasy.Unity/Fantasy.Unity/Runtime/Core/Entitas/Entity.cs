@@ -6,6 +6,7 @@ using Fantasy.Pool;
 using MongoDB.Bson.Serialization.Attributes;
 using Newtonsoft.Json;
 using ProtoBuf;
+using UnityEngine;
 
 // ReSharper disable ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
 // ReSharper disable MergeIntoPattern
@@ -942,6 +943,9 @@ namespace Fantasy.Entitas
         /// </summary>
         public virtual void Dispose()
         {
+            if (this.GetType().Name.Contains("Session")) {
+                Debug.LogError("Session dispose...");
+            }
             if (IsDisposed)
             {
                 return;
