@@ -180,6 +180,7 @@ message Msg_LoadDungeonProgress // IMessage
 message Msg_StartDungeonBattle // IMessage 
 {
   repeated RoleData battle_role_datas = 1;
+  RoleData team_leader = 2;
 }
 
 
