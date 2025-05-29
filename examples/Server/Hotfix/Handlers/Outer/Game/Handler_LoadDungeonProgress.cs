@@ -38,9 +38,10 @@ public class Handler_LoadDungeonProgress : Message<Msg_LoadDungeonProgress> {
         if (isAllComplete) {
             FTask.OnceTimer(session.Scene, 1000, async () => {
                 teamComponent.ResetLoadProgress(message.team_id);
-                Msg_StartDungeonBattle msgStartDungeonBattle = new();
                 var listAllMembers = teamComponent.GetTeamRoleListByTeamID(message.team_id);
                 if (listAllMembers != null) {
+                    Msg_StartDungeonBattle msgStartDungeonBattle = new();
+                    msgStartDungeonBattle.battle_role_datas = listAllMembers.Select(role => role.ToRoleData()).ToList();
                     foreach (var member in listAllMembers) {
                         member.session.Send(msgStartDungeonBattle);
                         Log.Info($"队伍:{message.team_id} 通知玩家 {member.role_name} 开始战斗");
