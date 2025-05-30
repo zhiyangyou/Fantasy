@@ -81,7 +81,6 @@ namespace Fantasy.Network
 
         private void CheckTimeOut()
         {
-            Debug.LogError($"{TimeHelper.Now - LastTime} {TimeOut}");
             if (TimeHelper.Now - LastTime < TimeOut)
             {
                 return;
@@ -94,6 +93,7 @@ namespace Fantasy.Network
                 return;
             }
 
+            Debug.LogError($" 计时器超时, 导致链接断开了{TimeHelper.Now - LastTime} {TimeOut}");
             entityReference.Dispose();
         }
 
@@ -136,7 +136,7 @@ namespace Fantasy.Network
             try
             {
                 var requestTime = TimeHelper.Now;
-                // UnityEngine.Debug.LogError("request ping >>>");
+                UnityEngine.Debug.LogError("request ping >>>"); // TODO 给老师反馈这个bug问题, 删除log语句, 心跳逻辑会有问题
                 var pingResponse = (PingResponse)await session.Call(_pingRequest);
                 // UnityEngine.Debug.LogError("resp ping <<<<");
                
