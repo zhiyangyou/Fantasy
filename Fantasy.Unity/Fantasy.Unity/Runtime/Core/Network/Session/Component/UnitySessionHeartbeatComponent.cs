@@ -79,8 +79,8 @@ namespace Fantasy.Network
             TimeOutTimerId = TimerComponent.Unity.RepeatedTimer(timeOutInterval, CheckTimeOut);
         }
 
-        private void CheckTimeOut()
-        {
+        private void CheckTimeOut() {
+            return; // TODO 莫名其妙会超时的Bug,先不管了
             if (TimeHelper.Now - LastTime < TimeOut)
             {
                 return;
@@ -136,7 +136,7 @@ namespace Fantasy.Network
             try
             {
                 var requestTime = TimeHelper.Now;
-                UnityEngine.Debug.LogError("request ping >>>"); // TODO 给老师反馈这个bug问题, 删除log语句, 心跳逻辑会有问题
+                UnityEngine.Debug.Log("request ping >>>"); // TODO 给老师反馈这个bug问题, 删除log语句, 心跳逻辑会有问题
                 var pingResponse = (PingResponse)await session.Call(_pingRequest);
                 // UnityEngine.Debug.LogError("resp ping <<<<");
                
