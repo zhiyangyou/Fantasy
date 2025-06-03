@@ -742,6 +742,7 @@ namespace Fantasy
 			skillType = default;
 			skillPos = default;
 			account_id = default;
+			frame_op_context_object_id = default;
 #if FANTASY_NET || FANTASY_UNITY
 			GetScene().MessagePoolComponent.Return<FrameOperateData>(this);
 #endif
@@ -758,5 +759,7 @@ namespace Fantasy
 		public CSFixIntVector3 skillPos { get; set; }
 		[ProtoMember(6)]
 		public long account_id { get; set; }
+		[ProtoMember(7)]
+		public long frame_op_context_object_id { get; set; }
 	}
 }

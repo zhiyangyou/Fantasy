@@ -246,4 +246,5 @@ message FrameOperateData
   int32 skillType = 4; // 技能类型
   CSFixIntVector3 skillPos = 5; // 技能位置: 引导位置等...
   int64  account_id = 6; // 用户
+  int64 frame_op_context_object_id = 7; // 帧操作上下文对象id
 }

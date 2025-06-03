@@ -28,6 +28,7 @@
         None,
         ClickSkill, // 点击触发技能
         GuideSkill, // 位置引导技能
-        StockPileTriggerSkill, // 蓄力技能
+        StockPileTriggerSkill_Begin, // 蓄力技能
+        StockPileTriggerSkill_End, // 蓄力技能
     }
 }
